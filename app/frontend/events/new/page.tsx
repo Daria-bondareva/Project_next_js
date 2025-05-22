@@ -4,23 +4,46 @@ import { useState, useEffect } from "react";
 import { createEvent, fetchUsers } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import styles from "@/app/frontend/css/NewEvent.module.css"
 
 export default function NewEventPage() {
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
   const [userId, setUserId] = useState("");
-  const [users, setUsers] = useState([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    fetchUsers()
-      .then(setUsers)
-      .catch(() => setError("Не вдалося завантажити користувачів"));
-  }, []);
+    const fetchCurrentUser = async () => {
+  try {
+    const res = await fetch("/api/auth/me", {
+      credentials: "include", // ✅ дозволяє надсилати кукі з токеном
+    });
+
+    if (!res.ok) throw new Error("Not authenticated");
+
+    const { user } = await res.json();
+    setUserId(user.userId); // або user._id, залежно від структури
+  } catch (err) {
+    router.push("/frontend/login");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+    fetchCurrentUser();
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+if (!userId) {
+    setError("Користувач не авторизований");
+    return;
+  }
+
     try {
       await createEvent({ title, date, userId });
       router.push("/frontend/events");
@@ -30,38 +53,40 @@ export default function NewEventPage() {
     }
   };
 
-  return (
-    <main className="max-w-md mx-auto p-4 space-y-4">
-      <h1 className="text-xl font-bold">Створити нову подію</h1>
+  if (loading) return <p>Завантаження...</p>;
 
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <div>
-          <label className="block mb-1 font-medium">Назва</label>
+  return (
+    <main className={styles.mainWrapper}>
+      <h1 className={styles.header}>Створити нову подію</h1>
+
+      <form onSubmit={handleSubmit} className={styles.formContainer}>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Назва</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            className="w-full border p-2 rounded"
+            className={styles.input}
           />
         </div>
-        <div>
-          <label className="block mb-1 font-medium">Дата</label>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Дата</label>
           <input
             type="datetime-local"
             value={date}
             onChange={(e) => setDate(e.target.value)}
             required
-            className="w-full border p-2 rounded"
+            className={styles.input}
           />
         </div>
-        <div>
-          <label className="block mb-1 font-medium">Користувач</label>
+        {/* <div className={styles.formGroup}>
+          <label className={styles.label}>Користувач</label>
           <select
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
             required
-            className="w-full border p-2 rounded"
+            className={styles.select}
           >
             <option value="">Оберіть користувача</option>
             {users.map((user: any) => (
@@ -70,23 +95,25 @@ export default function NewEventPage() {
               </option>
             ))}
           </select>
-        </div>
+        </div> */}
 
-        {error && <p className="text-red-600">{error}</p>}
+        {error && <p className={styles.error}>{error}</p>}
 
+      <div className={styles.buttonGroup}>
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className={styles.buttonPrimary}
         >
           Створити
         </button>
-      </form>
-
+      
       <Link href="/frontend/events">
-        <button className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mt-4">
+        <button className={styles.buttonSecondary}>
           Назад
         </button>
       </Link>
+      </div>
+      </form>
     </main>
   );
 }

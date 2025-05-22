@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import styles from "@/app/frontend/css/EditEventPage.module.css"
 
 export default function EditEventPage({ params }: { params: { id: string } }) {
   const [title, setTitle] = useState('');
@@ -43,34 +44,31 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
     }
   };
 
-  return (
-    <main className="max-w-2xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Редагувати подію</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+ return (
+    <main className={styles.container}>
+      <h1 className={styles.title}>Редагувати подію</h1>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <div>
-          <label className="block font-semibold">Назва</label>
+          <label className={styles.label}>Назва</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
+            className={styles.input}
             required
           />
         </div>
         <div>
-          <label className="block font-semibold">Дата</label>
+          <label className={styles.label}>Дата</label>
           <input
             type="datetime-local"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
+            className={styles.input}
             required
           />
         </div>
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
+        <button type="submit" className={styles.button}>
           Зберегти
         </button>
       </form>

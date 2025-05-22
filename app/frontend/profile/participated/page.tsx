@@ -2,6 +2,7 @@ import { connectDB } from "@/lib/mongodb";
 import Event from "@/lib/models/Event";
 import { getCurrentUser } from "@/lib/getCurrentUser";
 import Link from "next/link";
+import styles from "@/app/frontend/css/ParticipatedEvents.module.css"
 
 export default async function ParticipatedEventsPage() {
   await connectDB();
@@ -17,22 +18,24 @@ export default async function ParticipatedEventsPage() {
     .lean();
 
   return (
-    <main className="max-w-3xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Я беру участь</h1>
+    <main className={styles.container}>
+      <h1 className={styles.title}>Я беру участь</h1>
 
       {events.length === 0 ? (
-        <p>Ви ще не приєдналися до жодної події.</p>
+        <p className={styles.noEvents}>Ви ще не приєдналися до жодної події.</p>
       ) : (
-        <ul className="space-y-4">
+        <ul className={styles.eventList}>
           {events.map((event) => (
-            <li key={String(event._id)} className="border p-4 rounded shadow">
-              <h2 className="text-xl font-semibold">{event.title}</h2>
-              <p className="text-sm text-gray-600">
+            <li key={String(event._id)} className={styles.eventCard}>
+              <div>
+              <h2 className={styles.eventTitle}>{event.title}</h2>
+              <p className={styles.eventDate}>
                 {new Date(event.date).toLocaleString()}
               </p>
+              </div>
               <Link
                 href={`/frontend/events/${String(event._id)}`}
-                className="inline-block mt-2 text-blue-600 hover:underline"
+                className={styles.viewLink}
               >
                 Переглянути
               </Link>

@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import { fetchEvents } from "@/lib/api";
 import Link from "next/link";
-import "@/app/frontend/styles/buttons.css";
+import style1 from "@/app/frontend/css/EventCard.module.css";
+import styles from "@/app/Home.module.css";
+import styles2 from "@/app/frontend/css/PageEvents.module.css"
 
 type Event = {
   _id: string;
@@ -46,33 +48,33 @@ export default function EventsPage() {
 
   return (
     <main className="max-w-3xl mx-auto p-4 space-y-6">
-      <h1 className="text-2xl font-bold">Список подій</h1>
+      <h1 className={`${styles2.pageTitle} ${styles.title}`}>Список подій</h1>
 
-      <div className="flex gap-2 mb-4">
+  <div className={styles2.filterPanel}>
   <input
     type="text"
     value={searchTerm}
     onChange={(e) => setSearchTerm(e.target.value)}
     placeholder="Пошук за назвою..."
-    className="border p-2 rounded flex-grow"
+    className={styles2.filterInput}
   />
   <button
     onClick={handleSearch}
-    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+    className={styles2.filterButton}
   >
     Пошук
   </button>
 
   <button
     onClick={() => setSortField((prev) => (prev === "title" ? "date" : "title"))}
-    className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+    className={styles2.filterButton}
   >
     Сортувати за: {sortField === "title" ? "Назвою" : "Датою"}
   </button>
 
   <button
     onClick={() => setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"))}
-    className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+    className={styles2.filterButton}
   >
     {sortDirection === "asc" ? "↑" : "↓"}
   </button>
@@ -84,13 +86,13 @@ export default function EventsPage() {
       ) : events.length === 0 ? (
         <p>Немає подій.</p>
       ) : (
-        <ul className="space-y-3">
+        <ul className={style1.cardList}>
           {events.map((event) => (
-            <li key={event._id} className="border p-3 rounded shadow-sm">
-              <h2 className="font-semibold">{event.title}</h2>
-              <p>Дата: {new Date(event.date).toLocaleDateString()}</p>
-              <p className="text-gray-600">Автор: {event.userId?.username || "Невідомо"}</p>
-              <a href={`/frontend/events/${event._id}`} className="view-button">
+            <li key={event._id} className={style1.card}>
+              <h3 className={style1.cardHeader}>{event.title}</h3>
+              <p className={style1.cardContent}>Дата: {new Date(event.date).toLocaleDateString()}</p>
+              <p className={style1.cardUser}>Автор: {event.userId?.username || "Невідомо"}</p>
+              <a href={`/frontend/events/${event._id}`} className={style1.viewButton}>
             Переглянути
             </a>
             </li>
@@ -99,7 +101,7 @@ export default function EventsPage() {
       )}
 
       <Link href="/">
-        <button className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mt-4">
+        <button className={style1.viewButton}>
           Назад до головної
         </button>
       </Link>

@@ -1,0 +1,42 @@
+.filterPanel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+  align-items: center;
+}
+
+.filterInput {
+  width: 450px;
+  padding: 5px 14px;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  margin-left: 25px;
+}
+
+.filterInput:focus {
+  border-color: #58d1de;
+}
+
+.filterButton {
+  background-color: #fb9b0b;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filterButton:hover {
+  background-color: #fb870b;
+}
+
+.pageTitle {
+  margin-top: 32px; /* більше простору зверху */
+  margin-bottom: 24px; /* більше простору знизу */
+}

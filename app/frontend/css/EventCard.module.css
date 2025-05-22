@@ -1,0 +1,97 @@
+.card {
+  background: #58d1de;
+  border-radius: 20px;
+  border: 3px solid #fff;
+  color: var(--color-text);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  will-change: transform;
+  padding: 30px;
+  width: 300px;
+  overflow: hidden; /* важливо */
+
+  display: flex; /* робимо колонку */
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.cardHeader {
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  color: #fff;
+  padding: 10px;
+  border-radius: 12px;
+  background: linear-gradient(
+    to right,
+    var(--card3-gradient-color1),
+    var(--card3-gradient-color2)
+  );
+  text-align: center;
+}
+
+.cardContent {
+  font-size: 14px;
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+
+.cardUser {
+  font-size: 12px;
+  color: #888;
+  font-style: italic;
+}
+
+.cardList {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-top: 15px;
+  padding-bottom: 40px;
+  padding-left: 24px;
+}
+
+.headerSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.title {
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 600; /* font-semibold */
+  flex-grow: 1;
+  min-width: 200px;
+}
+
+.eventsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px; /* менша відстань між картками */
+  padding-left: 24px; /* або margin-left */
+}
+
+.viewButton {
+  margin-top: auto;
+  align-self: center; /* або center/right — за потреби */
+  background-color: #2563eb;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #ffffff;
+  transition: background-color 0.3s ease;
+}
+
+.viewButton:hover {
+  background-color: #013ec2;
+}

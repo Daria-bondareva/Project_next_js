@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import "@/app/frontend/styles/buttons.css";
+import styles from "@/app/frontend/css/ProfilePage.module.css"
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
@@ -37,29 +38,31 @@ export default function ProfilePage() {
   if (!user) return <p>Користувача не знайдено або ви не авторизовані</p>;
 
   return (
-    <main className="max-w-3xl mx-auto p-4 space-y-4">
-      <h1 className="text-2xl font-bold">Профіль: {user.username}</h1>
-      <p>Email: {user.email}</p>
+    <main className={styles.profileContainer}>
+      <section className={styles.userCard}>
+      <h1 className={styles.username}>Профіль: {user.username}</h1>
+      <p className={styles.email}>Email: {user.email}</p>
 
-      <Link href="/frontend/profile/participated">
+      <Link href="/frontend/profile/participated" className={styles.linkButton}>
   Я беру участь
 </Link>
+</section>
 
-
-      <h2 className="text-xl font-semibold mt-6">Події користувача</h2>
+      <section className={styles.eventsSection}>
+      <h2 className={styles.eventsTitle}>Події користувача</h2>
       {events.length === 0 ? (
-        <p>Немає подій.</p>
+        <p className={styles.noEvents}>Немає подій.</p>
       ) : (
-        <ul className="space-y-3">
+        <ul className={styles.eventsList}>
           {events.map((event: any) => (
             <li
               key={event._id}
-              className="border p-3 rounded flex justify-between items-center"
+              className={styles.eventCard}
             >
-              <span className="font-semibold">{event.title}</span>
+              <span className={styles.eventTitle}>{event.title}</span>
               <Link
                 href={`/frontend/events/${event._id}`}
-                className="view-button"
+                className={styles.viewButton}
               >
                 Переглянути
               </Link>
@@ -67,12 +70,13 @@ export default function ProfilePage() {
           ))}
         </ul>
       )}
+</section>
 
       <button
         onClick={handleLogout}
-        className="mt-6 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+        className={styles.logoutButton}
       >
-        Вийти
+        Вийти з профілю
       </button>
     </main>
   );

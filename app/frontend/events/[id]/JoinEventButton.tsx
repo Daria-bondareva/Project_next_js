@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import styles from "@/app/frontend/css/EventButtons.module.css"
 
 export default function JoinEventButton({ eventId }: { eventId: string }) {
   const [joined, setJoined] = useState(false);
@@ -41,42 +42,42 @@ export default function JoinEventButton({ eventId }: { eventId: string }) {
 
   if (isAuthor) {
     return (
-      <div className="mt-4">
-        <p className="text-blue-600 font-semibold">Ви є автором цієї події.</p>
+      <div className={styles.container}>
+        <p className={styles.authorNote}>Ви є автором цієї події.</p>
         {participants.length > 0 ? (
           <div className="mt-2">
             <p className="font-medium">Учасники події:</p>
-            <ul className="list-disc list-inside">
+            <ul className={styles.participantsList}>
               {participants.map((name, idx) => (
-                <li key={idx}>{name}</li>
+                <li key={idx} className={styles.participantItem}>{name}</li>
               ))}
             </ul>
           </div>
         ) : (
-          <p className="mt-2 text-sm">Поки що немає учасників.</p>
+          <p className={styles.noParticipants}>Поки що немає учасників.</p>
         )}
       </div>
     );
   }
 
   return (
-    <div className="mt-4">
+    <div className={styles.container}>
       {joined ? (
         <button
           onClick={handleLeave}
-          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+          className={`${styles.button} ${styles.leave}`}
         >
           Вийти з події
         </button>
       ) : (
         <button
           onClick={handleJoin}
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          className={`${styles.button} ${styles.join}`}
         >
           Прийняти участь
         </button>
       )}
-      {message && <p className="mt-2 text-sm">{message}</p>}
+      {message && <p className={styles.message}>{message}</p>}
     </div>
   );
 }

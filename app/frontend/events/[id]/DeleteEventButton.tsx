@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import styles from "@/app/frontend/css/EventButtons.module.css"
 
 export default function DeleteEventButton({ eventId }: { eventId: string }) {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function DeleteEventButton({ eventId }: { eventId: string }) {
   return (
     <button
       onClick={handleDelete}
-      className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+      className={`${styles.button} ${styles.leave}`}
     >
       Видалити
     </button>

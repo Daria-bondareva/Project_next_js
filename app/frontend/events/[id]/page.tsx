@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
 import { connectDB } from "@/lib/mongodb";
 import Event from "@/lib/models/Event";
-import JoinEventButton from "./JoinEventButton"; // ✅ ЗАЛИШАЄМО ЦЕЙ
+import JoinEventButton from "./JoinEventButton"; 
 import DeleteEventButton from "./DeleteEventButton";
 import { getCurrentUser } from "@/lib/getCurrentUser"; 
+import styles from "@/app/frontend/css/EventDetails.module.css"
+import BackButton from "./BackButton";
 
 type EventType = {
   _id: string;
@@ -13,7 +15,7 @@ type EventType = {
     _id: string;
     username: string;
   };
-  participants: string[]; // ← додай оце!
+  participants: string[]; 
 };
 
 
@@ -30,22 +32,25 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
   const isAuthor = currentUser && currentUser.userId === String(event.userId._id);
 
   return (
-    <main className="max-w-2xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">{event.title}</h1>
-      <p><strong>Дата:</strong> {new Date(event.date).toLocaleString()}</p>
+    <div className={styles.pageWrapper}>
+  <BackButton />
+    <main className={styles.wrapper}>
+      
+      <h1 className={styles.title}>{event.title}</h1>
+      <p className={styles.text}><strong>Дата:</strong> {new Date(event.date).toLocaleString()}</p>
 
       {!isAuthor && (
-        <p className="mt-4">
+        <p className={styles.text}>
           <strong>Автор:</strong> {event.userId.username}
         </p>
       )}
       <JoinEventButton eventId={String(event._id)} />
 
 {isAuthor && (
-  <div className="mt-6 flex space-x-4">
+  <div className={styles.actions}>
     <a
       href={`/frontend/events/${event._id}/edit`}
-      className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+      className={styles.editButton}
     >
       Редагувати
     </a>
@@ -55,5 +60,6 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
 
 
     </main>
+    </div>
   );
 }

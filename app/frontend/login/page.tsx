@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import styles from "@/app/frontend/css/LoginPage.module.css"
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -29,32 +30,32 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="max-w-md mx-auto p-4">
-      <h1 className="text-xl font-bold mb-4">Вхід</h1>
-      <form onSubmit={handleLogin} className="space-y-4">
+    <main className={styles.container}>
+      <h1 className={styles.title}>Вхід</h1>
+      <form onSubmit={handleLogin} className={styles.form}>
         <input
           type="text"
           placeholder="Ім'я користувача"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="w-full border p-2 rounded"
+          className={styles.input}
         />
         <input
           type="password"
           placeholder="Пароль"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full border p-2 rounded"
+          className={styles.input}
         />
-        {error && <p className="text-red-600">{error}</p>}
-        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        {error && <p className={styles.error}>{error}</p>}
+        <button type="submit" className={styles.button}>
           Увійти
         </button>
       </form>
       
-      <p className="text-sm mt-4">
+      <p className={styles.registerLink}>
   Не маєте акаунта?{" "}
-  <Link href="/frontend/users/new" className="text-blue-600 hover:underline">
+  <Link href="/frontend/users/new" className={styles.link}>
     Зареєструватися
   </Link>
 </p>

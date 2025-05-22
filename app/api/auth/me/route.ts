@@ -8,7 +8,7 @@ export async function GET() {
   const token = (await cookies()).get("token")?.value;
 
   if (!token) {
-    return NextResponse.json({ error: "Не авторизований" }, { status: 401 });
+    return NextResponse.json({ error: "Авторизуйтесь перед виконанням цієї дії " }, { status: 401 });
   }
 
   try {

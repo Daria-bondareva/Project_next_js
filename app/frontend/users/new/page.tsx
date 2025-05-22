@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createUser } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import styles from "@/app/frontend/css/NewUserPage.module.css"
 
 export default function NewUserPage() {
   const [username, setUsername] = useState("");
@@ -44,56 +45,49 @@ export default function NewUserPage() {
   };
 
   return (
-    <main className="max-w-md mx-auto p-4 space-y-4">
-      <h1 className="text-xl font-bold">Створити нового користувача</h1>
+    <main className={styles.container}>
+      <h1 className={styles.title}>Реєстрація</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className={styles.form}>
         <div>
-          <label className="block mb-1 font-medium">Ім'я</label>
+          <label className={styles.label}>Ім'я</label>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            className="w-full border p-2 rounded"
+            className={styles.input}
           />
         </div>
         <div>
-          <label className="block mb-1 font-medium">Email</label>
+          <label className={styles.label}>Email</label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full border p-2 rounded"
+            className={styles.input}
           />
         </div>
         <div>
-          <label className="block mb-1 font-medium">Пароль</label>
+          <label className={styles.label}>Пароль</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full border p-2 rounded"
+            className={styles.input}
           />
         </div>
 
-        {error && <p className="text-red-600">{error}</p>}
+        {error && <p className={styles.error}>{error}</p>}
 
-        <button
-          type="submit"
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+        <button type="submit" className={styles.submit}
         >
           Створити
         </button>
       </form>
 
-      <Link href="/frontend/users">
-        <button className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mt-4">
-          Назад
-        </button>
-      </Link>
     </main>
   );
 }

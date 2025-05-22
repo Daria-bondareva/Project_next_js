@@ -1,0 +1,86 @@
+.wrapper {
+  width: 700px;
+  margin: 40px 0;
+  padding: 32px;
+  border-radius: 20px;
+  background-color: #f4faff;
+  border: 3px solid #58d1de;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.pageWrapper {
+  display: flex;
+  align-items: flex-start; /* вирівнюємо по верхньому краю */
+  gap: 20px; /* відстань між кнопкою і карткою */
+  justify-content: center;
+  margin: 40px auto;
+  padding: 0 20px;
+  max-width: 1900px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 20px;
+}
+
+.text {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #334155;
+}
+
+.actions {
+  margin-top: 30px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.editButton {
+  background-color: #fbbf24;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.editButton:hover {
+  background-color: #f59e0b;
+}
+
+.container {
+  position: relative;
+}
+
+.backButton {
+  /* top: 1rem;
+  left: 1rem; */
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background-color: #fb9b0b;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+.backButton:hover {
+  background-color: #fb870b;
+}
+
+.backButtonWrapper {
+  margin-top: 40px; /* відступ зверху, щоб кнопка була явно нижче */
+  display: flex;
+  justify-content: flex-start; /* кнопка ліворуч */
+}

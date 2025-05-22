@@ -1,0 +1,82 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #222;
+}
+
+.noEvents {
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+  background-color: #fff5e5;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.eventList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.eventCard {
+  background-color: #fffef6;
+  padding: 20px 24px;
+  border-radius: 16px;
+  border: 1px solid #f2e3c6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease;
+}
+
+.eventCard:hover {
+  transform: translateY(-2px);
+}
+
+.eventTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.eventDate {
+  font-size: 14px;
+  color: #666;
+}
+
+.viewLink {
+  background-color: #fb9b0b;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.viewLink:hover {
+  background-color: #fb870b;
+}
+
+.error {
+  padding: 20px;
+  color: #b91c1c;
+  background-color: #fee2e2;
+  border-radius: 12px;
+  text-align: center;
+  margin: 40px auto;
+  max-width: 600px;
+  font-weight: 600;
+}

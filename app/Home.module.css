@@ -1,0 +1,106 @@
+.heroSection {
+  position: relative;
+  width: calc(100% + 10px); /* додали ширину на 10px */
+  height: 300px;
+  overflow: hidden;
+  margin-left: -5px; /* виступає за межі контейнера */
+  margin-right: -5px;
+  border-radius: 8px;
+}
+
+.heroImage {
+  object-fit: cover;
+  z-index: 0;
+}
+
+.heroContent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  z-index: 1;
+}
+
+.heroButton {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  background-color: #fdf37b;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-right: 16px;
+}
+
+.heroButton:hover {
+  background-color: #fbe64d;
+}
+
+.title {
+  font-size: 28px; /* ~text-xl */
+  font-weight: 600; /* ~font-semibold */
+  width: 70%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 80px;
+}
+
+.headerSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  flex-wrap: nowrap; /* щоб кнопка не переносилась */
+  gap: 12px;
+}
+
+/* для */
+/* банера створення події */
+.createBlock {
+  background-color: #ffeaca;
+  padding: 32px;
+  border-radius: 20px;
+  margin: 48px auto 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 1100px;
+  margin-bottom: 64px;
+}
+
+.textContent {
+  max-width: 600px;
+}
+
+.createTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 12px;
+}
+
+.createDescription {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.red {
+  background-color: #fb9b0b;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 10px 22px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.red:hover {
+  background-color: #fb870b;
+}

@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import styles from "./Header.module.css";
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -19,47 +22,65 @@ export default function Header() {
     checkAuth();
   }, []);
 
+  const handleAddEvent = async () => {
+    try {
+      const res = await fetch("/api/auth/me");
+      if (res.ok) {
+        router.push("/frontend/events/new");
+      } else {
+        router.push("/frontend/login");
+      }
+    } catch {
+      router.push("/frontend/login");
+    }
+  };
+
   if (isLoggedIn === null) {
     return null; // або показати прелоадер/заглушку
   }
 
   return (
-    <header className="w-full bg-gray-100 p-4 flex justify-between items-center">
-      <Link href="/" className="text-xl font-bold">
-        🏠 Головна
+    <header className={styles.header}>
+      <Link href="/" className={styles.logo}>
+        Kindred
       </Link>
 
-      <div className="flex space-x-3">
-        <Link href="/frontend/users">
-          <button className="bg-gray-700 text-white px-3 py-2 rounded hover:bg-gray-800">
-            👤 Користувачі
+      <div className={styles.navButtons}>
+        {/* <Link href="/frontend/users">
+          <button className={styles.button}>
+            Користувачі
+          </button>
+        </Link> */}
+        <Link href="/">
+          <button className={`${styles.button} ${styles.linkButton}`}>
+            Головна
           </button>
         </Link>
         <Link href="/frontend/events">
-          <button className="bg-gray-700 text-white px-3 py-2 rounded hover:bg-gray-800">
-            📅 Події
+          <button className={`${styles.button} ${styles.linkButton}`}>
+            Події
           </button>
         </Link>
-        <Link href="/frontend/users/new">
-          <button className="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700">
-            ➕ Користувач
+        {/* <Link href="/frontend/users/new">
+          <button className={styles.button}>
+            Користувач
           </button>
-        </Link>
-        <Link href="/frontend/events/new">
-          <button className="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700">
-            ➕ Подія
+        </Link> */}
+        
+          <button onClick={handleAddEvent} className={`${styles.linkButton}`}>
+            Додати подію
           </button>
-        </Link>
+        
 
         {isLoggedIn ? (
           <Link href="/frontend/profile">
-            <button className="bg-indigo-600 text-white px-3 py-2 rounded hover:bg-indigo-700">
-              👤 Профіль
+            <button className={`${styles.linkButton} ${styles.indigo}`}>
+              Мій профіль
             </button>
           </Link>
         ) : (
           <Link href="/frontend/login">
-            <button className="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700">
+            <button className={`${styles.button} ${styles.yellow}`}>
               Увійти
             </button>
           </Link>

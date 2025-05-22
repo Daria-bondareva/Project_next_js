@@ -48,6 +48,8 @@ export async function createEvent(data: {
   });
 
   if (!res.ok) {
+    const errText = await res.text(); 
+    console.error("Помилка з сервера:", errText);
     throw new Error("Помилка при створенні події");
   }
 

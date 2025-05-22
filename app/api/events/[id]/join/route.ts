@@ -7,7 +7,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
   await connectDB();
   const token = req.headers.get("cookie")?.split("token=")[1]?.split(";")[0];
 
-  if (!token) return NextResponse.json({ error: "Не авторизований" }, { status: 401 });
+  if (!token) return NextResponse.json({ error: "Вас не доєднано. Авторизуйтесь перед початком цієї дії !" }, { status: 401 });
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string };

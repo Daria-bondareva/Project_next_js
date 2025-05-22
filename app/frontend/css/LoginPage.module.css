@@ -1,0 +1,79 @@
+.container {
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 30px 20px;
+  background-color: #fffef6;
+  border-radius: 20px;
+  border: 1px solid #f2e3c6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #222;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 16px;
+  background-color: #fff;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: #fb9b0b;
+  outline: none;
+}
+
+.button {
+  background-color: #fb9b0b;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: #fb870b;
+}
+
+.error {
+  color: #b91c1c;
+  background-color: #fee2e2;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.registerLink {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+}
+
+.link {
+  color: #0070f3;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.link:hover {
+  color: #004bb4;
+}
