@@ -5,6 +5,8 @@ const EventSchema = new mongoose.Schema({
   date: { type: Date, required: true },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Додано
+
+tags: [{ type: String }], // Масив рядків для тегів
 });
 
 

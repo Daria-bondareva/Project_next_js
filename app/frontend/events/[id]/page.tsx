@@ -16,6 +16,7 @@ type EventType = {
     username: string;
   };
   participants: string[]; 
+  tags: string[];
 };
 
 
@@ -44,6 +45,18 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
           <strong>Автор:</strong> {event.userId.username}
         </p>
       )}
+      {/* +++ 2. ДОДАЙТЕ ЦЕЙ БЛОК ДЛЯ ВІДОБРАЖЕННЯ ТЕГІВ +++ */}
+        {event.tags && event.tags.length > 0 && (
+          // Вам потрібно буде створити стилі для .tagContainer та .tag
+          <div className={styles.tagContainer}> 
+            {event.tags.map((tag: string) => (
+              <span key={tag} className={styles.tag}>
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
+        {/* +++ КІНЕЦЬ БЛОКУ ТЕГІВ +++ */}
       <JoinEventButton eventId={String(event._id)} />
 
 {isAuthor && (

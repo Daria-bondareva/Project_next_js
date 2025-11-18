@@ -6,6 +6,8 @@ const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true },
   passwordHash: { type: String, required: true },
+
+  interests: [{ type: String }], // Масив рядків для інтересів
 });
 
 UserSchema.pre("findOneAndDelete", async function (next) {

@@ -39,7 +39,7 @@ if (sort === "date_asc") {
 
 export async function POST(req: Request) {
   await connectDB();
-  const { title, date, userId } = await req.json();
+  const { title, date, userId, tags } = await req.json();
 
   if (!title || !date || !userId) {
     return NextResponse.json(
@@ -56,7 +56,8 @@ export async function POST(req: Request) {
   const newEvent = new Event({
     title,
     date: new Date(date),
-    userId });
+    userId, 
+    tags: tags });
   const savedEvent = await newEvent.save();
   await savedEvent.populate("userId", "username");
   return NextResponse.json(savedEvent);

@@ -5,10 +5,12 @@ import { createEvent, fetchUsers } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "@/app/frontend/css/NewEvent.module.css"
+import { ALL_TAGS } from "@/lib/constants";
 
 export default function NewEventPage() {
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
+  const [tags, setTags] = useState<string[]>([]); // +++ Додаємо стан для тегів
   const [userId, setUserId] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -24,7 +26,7 @@ export default function NewEventPage() {
     if (!res.ok) throw new Error("Not authenticated");
 
     const { user } = await res.json();
-    setUserId(user.userId); // або user._id, залежно від структури
+    setUserId(user._id); // або user._id, залежно від структури
   } catch (err) {
     router.push("/frontend/login");
   } finally {
@@ -32,9 +34,19 @@ export default function NewEventPage() {
   }
 };
 
-
     fetchCurrentUser();
   }, [router]);
+
+// +++ 3. Функція для обробки кліку на чекбокс
+  const handleTagChange = (tag: string) => {
+    setTags(prevTags => 
+      // Якщо тег вже є у масиві -> видаляємо його
+      prevTags.includes(tag)
+        ? prevTags.filter(t => t !== tag)
+        // Якщо тега нема -> додаємо його
+        : [...prevTags, tag]
+    );
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,7 +57,7 @@ if (!userId) {
   }
 
     try {
-      await createEvent({ title, date, userId });
+      await createEvent({ title, date, userId, tags: tags });
       router.push("/frontend/events");
     } catch (err) {
       setError("Не вдалося створити подію");
@@ -80,6 +92,26 @@ if (!userId) {
             className={styles.input}
           />
         </div>
+
+        {/* +++ 5. Замінюємо старе поле тегів на це +++ */}
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Теги (оберіть з переліку)</label>
+          {/* Створіть CSS-клас для 'tagGroup' для гарного відображення */}
+          <div className={styles.tagGroup}> 
+            {ALL_TAGS.map(tag => (
+              <label key={tag} className={styles.tagLabel}> {/* Створіть CSS-клас для 'tagLabel' */}
+                <input
+                  type="checkbox"
+                  checked={tags.includes(tag)}
+                  onChange={() => handleTagChange(tag)}
+                />
+                {tag}
+              </label>
+            ))}
+          </div>
+        </div>
+        {/* +++ Кінець нового блоку +++ */}
+
         {/* <div className={styles.formGroup}>
           <label className={styles.label}>Користувач</label>
           <select
