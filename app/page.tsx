@@ -2,131 +2,185 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { fetchUsers, fetchEvents } from "@/lib/api";
+import { fetchEvents } from "@/lib/api";
 import styles from "./Home.module.css";
-import style1 from "./frontend/css/EventCard.module.css";
+// Виправили назву імпорту для ясності
+import cardStyles from "./frontend/css/EventCard.module.css"; 
 import Image from "next/image";
-
-type User = {
-  _id: string;
-  username: string;
-};
 
 type Event = {
   _id: string;
   title: string;
   date: string;
+  tags?: string[];
   userId: {
     _id: string;
     username: string;
   };
 };
 
-
 export default function HomePage() {
   const [events, setEvents] = useState<Event[]>([]);
-  const [users, setUsers] = useState<User[]>([]);
+  const [recommendations, setRecommendations] = useState<Event[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+  const [loadingRecs, setLoadingRecs] = useState(false);
 
   useEffect(() => {
-    const load = async () => {
-      const [ev, us] = await Promise.all([
-        fetchEvents("sort=date_desc"),
-        fetchUsers(),
-      ]);
-      setEvents(ev.slice(0, 5)); // Тільки 3 останні
-      setUsers(us);
-    };
-
     const checkAuth = async () => {
       try {
         const res = await fetch("/api/auth/me");
-        setIsLoggedIn(res.ok);
+        const authStatus = res.ok;
+        setIsLoggedIn(authStatus);
+        
+        if (authStatus) {
+            loadRecommendations();
+        }
       } catch {
         setIsLoggedIn(false);
       }
     };
 
-    load();
+    const loadEvents = async () => {
+      try {
+        const ev = await fetchEvents("sort=date_desc");
+        setEvents(ev.slice(0, 5)); 
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    const loadRecommendations = async () => {
+        setLoadingRecs(true);
+        try {
+            // Переконайтесь, що тут правильний порт (8002 для Real ML або 8000 для Гібридної)
+            // Або просто /api/recommendations, якщо ви налаштували route.ts
+            const res = await fetch('/api/recommendations'); 
+            if (res.ok) {
+                const data = await res.json();
+                setRecommendations(data);
+            }
+        } catch (e) {
+            console.error("Failed to load recs", e);
+        } finally {
+            setLoadingRecs(false);
+        }
+    }
+
+    loadEvents();
     checkAuth();
   }, []);
 
+  // Функція для рендерингу однієї картки (щоб не дублювати код)
+  const renderCard = (e: Event) => (
+    <li key={e._id} className={cardStyles.card}>
+        {/* Заголовок */}
+        <h3 className={cardStyles.cardHeader}>{e.title}</h3>
+
+        {/* Теги */}
+        {e.tags && e.tags.length > 0 && (
+            <div className={cardStyles.tagsContainer}>
+                {e.tags.slice(0, 3).map(t => (
+                    <span key={t} className={cardStyles.tag}>#{t}</span>
+                ))}
+                {e.tags.length > 3 && <span className={cardStyles.tag}>+{e.tags.length - 3}</span>}
+            </div>
+        )}
+
+        {/* Дата */}
+        <p className={cardStyles.cardContent}>
+            <span>📅</span> 
+            {new Date(e.date).toLocaleDateString('uk-UA', { 
+                day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' 
+            })}
+        </p>
+
+        {/* Автор */}
+        <p className={cardStyles.cardUser}>
+            <span>👤</span> 
+            {e.userId?.username || 'Гість'}
+        </p>
+
+        {/* Кнопка */}
+        <div style={{ marginTop: 'auto' }}>
+            <a href={`/frontend/events/${e._id}`} className={cardStyles.viewButton}>
+                Детальніше
+            </a>
+        </div>
+    </li>
+  );
+
   return (
     <main className="max-w-3xl mx-auto p-4 space-y-6">
-     
+
+      {/* --- БАНЕР --- */}
       {isLoggedIn === false && (
         <div className={styles.heroSection}>
-          <Image
-            src="/ban_1_5.png"
-            alt="Background"
-            fill
-            className={styles.heroImage}
-          />
-          <div className={styles.heroContent}>
-            <h1>Знайдіть своїх людей, відкрийте інтереси, та приєднуйтесь до надихаючих заходів</h1>
-            <Link href="/frontend/users/new">
-              <button className={styles.heroButton}>Join to Kindred</button>
-            </Link>
-          </div>
+           <Image 
+             src="/ban_1_5.png" 
+             alt="Background" 
+             fill 
+             className={styles.heroImage}
+           />
+           <div className={styles.heroContent}>
+             <h1>Знайдіть своїх людей, відкрийте інтереси...</h1>
+             <Link href="/frontend/users/new"><button className={styles.heroButton}>Join to Kindred</button></Link>
+           </div>
         </div>
       )}
 
+      {/* --- РЕКОМЕНДАЦІЇ --- */}
+      {isLoggedIn && (
+        <section style={{marginBottom: '40px', marginTop: '20px'}}>
+            <h2 className={styles.title} style={{color: '#4f46e5'}}>🌟 Рекомендовано для вас</h2>
+            <p style={{fontSize: '0.9em', color: '#666', marginBottom: '15px'}}>
+                Підібрано на основі ваших інтересів та часу доби
+            </p>
 
-<section>
-      <section className={styles.headerSection}>
-  <h2 className={styles.title}>Популярні події</h2>
-  <Link href="/frontend/events">
-    <button className={styles.heroButton}>Більше →</button>
-  </Link>
-</section>
-      {events.length === 0 && <p>Подій поки немає.</p>}
-      <ul className={style1.cardList}>
-        {events.map((e) => (
-          <li key={e._id} className={style1.card}>
-            <h3 className={style1.cardHeader}>{e.title}</h3>
-            <p className={style1.cardContent}>
-              📅 Дата: {new Date(e.date).toLocaleString()}
-            </p>
-            <p className={style1.cardUser}>
-              👤 Користувач: {e.userId?.username || 'Невідомо'}
-            </p>
-            <a href={`/frontend/events/${e._id}`} className={style1.viewButton}>
-            Переглянути
-            </a>
-          </li>
-        ))}
+            {loadingRecs ? (
+                <p>Завантаження рекомендацій...</p>
+            ) : recommendations.length > 0 ? (
+                <ul className={cardStyles.cardList}>
+                    {recommendations.map(renderCard)}
+                </ul>
+            ) : (
+                <div style={{padding: '20px', background: '#f9fafb', borderRadius: '8px', textAlign: 'center', border: '1px dashed #ccc'}}>
+                    <p>Поки що немає персональних рекомендацій.</p>
+                    <Link href="/frontend/profile" style={{color: '#4f46e5', textDecoration: 'underline'}}>
+                        Оновіть свої інтереси
+                    </Link>
+                </div>
+            )}
+        </section>
+      )}
+
+      {/* --- ПОПУЛЯРНІ ПОДІЇ --- */}
+      <section>
+        <section className={styles.headerSection}>
+            <h2 className={styles.title}>Популярні події</h2>
+            <Link href="/frontend/events">
+                <button className={styles.heroButton}>Більше →</button>
+            </Link>
+        </section>
         
-      </ul>
-    </section>
-
-    <section className={styles.createBlock}>
-  <div className={styles.textContent}>
-    <h2 className={styles.createTitle}>Перетвори свою ідею в подію</h2>
-    <p className={styles.createDescription}>
-      Створи власну подію, яка надихає, об'єднує та розвиває твою спільноту. Це може бути хобі, професійна зустріч або просто крута ініціатива!
-    </p>
-    <Link href="/frontend/events/new">
-      <button className={`${styles.button} ${styles.red}`}>Створити подію →</button>
-    </Link>
-  </div>
-</section>
-
-
-
-      {/* <section>
-        <h2 className="text-xl font-semibold mt-6 mb-3">Популярні події</h2>
         {events.length === 0 && <p>Подій поки немає.</p>}
-        <ul className="space-y-3">
-          {events.map((e) => (
-  <li key={e._id} className="border p-3 rounded shadow-sm">
-    <h3 className="font-medium">{e.title}</h3>
-    <p>Дата: {new Date(e.date).toLocaleString()}</p>
-    <p>Користувач: {e.userId?.username || "Невідомо"}</p>
-  </li>
-))}
-
+        
+        <ul className={cardStyles.cardList}>
+            {events.map(renderCard)}
         </ul>
-      </section> */}
+      </section>
+
+      {/* Секція створення */}
+      <section className={styles.createBlock}>
+        <div className={styles.textContent}>
+            <h2 className={styles.createTitle}>Перетвори свою ідею в подію</h2>
+            <p className={styles.createDescription}>
+            Створи власну подію, яка надихає...
+            </p>
+            <Link href="/frontend/events/new">
+                <button className={`${styles.button} ${styles.red}`}>Створити подію →</button>
+            </Link>
+        </div>
+      </section>
 
     </main>
   );

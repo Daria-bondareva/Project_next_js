@@ -41,6 +41,7 @@ export async function createEvent(data: {
   date: string;
   userId: string;
   tags: string[];
+  description?: string;
 }) {
   const res = await fetch(`${API_URL}/events`, {
     method: "POST",

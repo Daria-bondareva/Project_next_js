@@ -13,11 +13,13 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
     await connectDB();
-    const { title, date, userId } = await req.json();
+    const { title, date, userId, tags, description} = await req.json();
   
     const update: any = {};
   if (title) update.title = title;
   if (date) update.date = date;
+  if (tags) update.tags = tags;
+  if (description) update.description = description;
   if (userId) {
     const userExists = await User.findById(userId);
     if (!userExists) {

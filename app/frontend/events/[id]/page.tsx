@@ -17,6 +17,7 @@ type EventType = {
   };
   participants: string[]; 
   tags: string[];
+  description?: string;
 };
 
 
@@ -45,6 +46,16 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
           <strong>Автор:</strong> {event.userId.username}
         </p>
       )}
+
+      {event.description && (
+            <div style={{marginTop: '20px', padding: '15px', background: '#f9f9f9', borderRadius: '8px'}}>
+                <h3 style={{fontSize: '1.1rem', marginBottom: '10px'}}>Про подію:</h3>
+                <p style={{whiteSpace: 'pre-wrap', lineHeight: '1.5', color: '#444'}}>
+                    {event.description}
+                </p>
+            </div>
+        )}
+
       {/* +++ 2. ДОДАЙТЕ ЦЕЙ БЛОК ДЛЯ ВІДОБРАЖЕННЯ ТЕГІВ +++ */}
         {event.tags && event.tags.length > 0 && (
           // Вам потрібно буде створити стилі для .tagContainer та .tag
@@ -70,7 +81,6 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
     <DeleteEventButton eventId={String(event._id)} />
   </div>
 )}
-
 
     </main>
     </div>

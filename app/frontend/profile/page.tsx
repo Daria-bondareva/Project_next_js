@@ -6,6 +6,7 @@ import "@/app/frontend/styles/buttons.css";
 import styles from "@/app/frontend/css/ProfilePage.module.css"
 import formStyles from "@/app/frontend/css/NewEvent.module.css"; // Використаємо стилі з іншої форми
 import { ALL_TAGS } from "@/lib/constants";
+import TagSelectionModal from "@/components/TagSelectionModal";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
@@ -13,7 +14,6 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [interests, setInterests] = useState<string[]>([]);
   const [isEditing, setIsEditing] = useState(false); // Чи відкрито вікно
-  const [tempInterests, setTempInterests] = useState<string[]>([]); // Тимчасовий вибір поки не натиснули "Зберегти"
   const [message, setMessage] = useState("");
 
   const handleLogout = async () => {
@@ -43,39 +43,24 @@ export default function ProfilePage() {
     loadProfile();
   }, []);
 
-  // 1. Відкрити модальне вікно
-  const openEditModal = () => {
-    setTempInterests([...interests]); // Копіюємо поточні інтереси в тимчасовий стан
-    setIsEditing(true);
-    setMessage("");
-  };
-
-  // 2. Логіка кліку на тег (переміщення між списками)
-  const toggleTempInterest = (tag: string) => {
-    setTempInterests(prev => 
-      prev.includes(tag)
-        ? prev.filter(t => t !== tag) // Якщо є -> видаляємо (переміщаємо вниз)
-        : [...prev, tag]              // Якщо нема -> додаємо (переміщаємо вверх)
-    );
-  };
-
-  // 3. Зберегти зміни на сервер
-  const handleSaveChanges = async () => {
+// +++ 3. Функція збереження стала простішою +++
+  // Вона тепер просто приймає масив тегів від модалки
+  const handleSaveInterests = async (selectedTags: string[]) => {
     try {
       const res = await fetch('/api/auth/me', { 
         method: 'PATCH', 
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ interests: tempInterests }), // Відправляємо тимчасовий вибір
+        body: JSON.stringify({ interests: selectedTags }),
       });
 
       if (!res.ok) throw new Error("Не вдалося оновити інтереси");
 
-      // Оновлюємо основний стан і закриваємо вікно
-      setInterests(tempInterests);
-      setIsEditing(false);
+      // Оновлюємо стан
+      setInterests(selectedTags);
+      setIsEditing(false); // Закриваємо модалку
       
-      // Можна оновити і об'єкт user для повноти картини
-      setUser((prev: any) => ({ ...prev, interests: tempInterests }));
+      // Оновлюємо об'єкт user
+      setUser((prev: any) => ({ ...prev, interests: selectedTags }));
 
     } catch (err: any) {
       alert(`Помилка: ${err.message}`);
@@ -84,11 +69,7 @@ export default function ProfilePage() {
 
   if (loading) return <p>Завантаження...</p>;
   if (!user) return <p>Користувача не знайдено або ви не авторизовані</p>;
-  // Обчислюємо списки для модального вікна
-  // "Обрані" = tempInterests
-  // "Доступні" = Всі теги МІНУС Обрані
-  const availableTags = ALL_TAGS.filter(tag => !tempInterests.includes(tag));
-
+  
   return (
     <main className={styles.profileContainer}>
       <section className={styles.userCard}>
@@ -102,7 +83,7 @@ export default function ProfilePage() {
 <div style={{marginTop: '20px'}}>
             <h3 className={styles.eventsTitle}>Мої інтереси</h3>
             
-            {/* Відображення збережених тегів (View Mode) */}
+            {/* Відображення тегів (View Mode) */}
             <div className={styles.tagsContainer}>
                 {interests.length > 0 ? (
                     interests.map(tag => (
@@ -114,66 +95,23 @@ export default function ProfilePage() {
             </div>
 
             {/* Кнопка редагування */}
-            <button onClick={openEditModal} className={styles.editButton}>
+            <button onClick={() => setIsEditing(true)} className={styles.editButton}>
                 ✏️ Редагувати інтереси
             </button>
         </div>
 </section>
 
-{/* --- МОДАЛЬНЕ ВІКНО (Відкривається тільки якщо isEditing === true) --- */}
-      {isEditing && (
-        <div className={styles.modalOverlay}>
-            <div className={styles.modalContent}>
-                <h2 className={styles.modalHeader}>Редагування інтересів</h2>
-                
-                <div className={styles.selectionArea}>
-                    
-                    {/* Ячейка 1: Вже вибрані */}
-                    <div className={styles.sectionBox} style={{backgroundColor: '#f0fdf4', borderColor: '#86efac'}}>
-                        <p className={styles.sectionTitle}>✅ Вибрані (Клікніть, щоб видалити)</p>
-                        <div className={styles.tagList}>
-                            {tempInterests.length === 0 && <span style={{color:'#aaa', fontSize:'0.9em'}}>Поки нічого не вибрано...</span>}
-                            {tempInterests.map(tag => (
-                                <span 
-                                    key={tag} 
-                                    onClick={() => toggleTempInterest(tag)}
-                                    className={`${styles.interactiveTag} ${styles.selectedTag}`}
-                                >
-                                    {tag} ✕
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Ячейка 2: Всі доступні */}
-                    <div className={styles.sectionBox}>
-                        <p className={styles.sectionTitle}>➕ Доступні (Клікніть, щоб додати)</p>
-                        <div className={styles.tagList}>
-                            {availableTags.map(tag => (
-                                <span 
-                                    key={tag} 
-                                    onClick={() => toggleTempInterest(tag)}
-                                    className={`${styles.interactiveTag} ${styles.availableTag}`}
-                                >
-                                    {tag}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-
-                </div>
-
-                <div className={styles.modalActions}>
-                    <button onClick={() => setIsEditing(false)} className={styles.cancelBtn}>
-                        Відмінити
-                    </button>
-                    <button onClick={handleSaveChanges} className={styles.saveBtn}>
-                        Зберегти зміни
-                    </button>
-                </div>
-            </div>
-        </div>
-      )}
+{/* +++ 4. ПІДКЛЮЧАЄМО МОДАЛКУ +++ */}
+      {/* Дивіться, наскільки чистішим став код! */}
+      <TagSelectionModal
+        isOpen={isEditing}
+        onClose={() => setIsEditing(false)}
+        onSave={handleSaveInterests}
+        initialSelected={interests}
+        allTags={ALL_TAGS}
+        title="Редагування інтересів"
+      />
+      {/* +++ КІНЕЦЬ МОДАЛКИ +++ */}
 
       <section className={styles.eventsSection}>
         <h2 className={styles.eventsTitle}>Події користувача</h2>

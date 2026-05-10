@@ -11,6 +11,7 @@ type Event = {
   _id: string;
   title: string;
   date: string;
+  tags?: string[];
   userId: {
     _id: string;
     username: string;
@@ -90,6 +91,20 @@ export default function EventsPage() {
           {events.map((event) => (
             <li key={event._id} className={style1.card}>
               <h3 className={style1.cardHeader}>{event.title}</h3>
+              <div style={{display:'flex', gap:'5px', margin:'5px 0', flexWrap:'wrap'}}>
+                {event.tags?.map(t => (
+                    <span key={t} style={{
+                        fontSize:'0.75em', 
+                        background:'#eef2ff', // Світло-фіолетовий фон
+                        color:'#4f46e5',      // Темно-фіолетовий текст
+                        padding:'2px 8px', 
+                        borderRadius:'10px', 
+                        fontWeight: '500'
+                    }}>
+                        #{t}
+                    </span>
+                ))}
+              </div>
               <p className={style1.cardContent}>Дата: {new Date(event.date).toLocaleDateString()}</p>
               <p className={style1.cardUser}>Автор: {event.userId?.username || "Невідомо"}</p>
               <a href={`/frontend/events/${event._id}`} className={style1.viewButton}>

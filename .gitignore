@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# ml data & models
+ml_classic_service/event_dataset.csv
+ml_classic_service/real_events_enriched.csv
+ml_classic_service/real_events_filtered.csv
+ml_classic_service/models/recommendation_model.pkl

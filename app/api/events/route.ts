@@ -18,7 +18,10 @@ export async function GET(req: Request) {
   }
 
   if (search) {
-    filter.title = { $regex: search, $options: "i" }; // Case-insensitive search
+    filter.$or = [
+      { title: { $regex: search, $options: "i" } }, // Шукаємо в назві
+      { tags: { $in: [new RegExp(search, "i")] } }  // АБО в тегах
+    ];
   }
 
   let sortOption = {};
@@ -39,7 +42,7 @@ if (sort === "date_asc") {
 
 export async function POST(req: Request) {
   await connectDB();
-  const { title, date, userId, tags } = await req.json();
+  const { title, date, userId, tags, description } = await req.json();
 
   if (!title || !date || !userId) {
     return NextResponse.json(
@@ -57,7 +60,8 @@ export async function POST(req: Request) {
     title,
     date: new Date(date),
     userId, 
-    tags: tags });
+    tags: tags,
+    description });
   const savedEvent = await newEvent.save();
   await savedEvent.populate("userId", "username");
   return NextResponse.json(savedEvent);
