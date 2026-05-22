@@ -51,3 +51,17 @@ ml_classic_service/event_dataset.csv
 ml_classic_service/real_events_enriched.csv
 ml_classic_service/real_events_filtered.csv
 ml_classic_service/models/recommendation_model.pkl
+
+# Data & Models
+recommendation_service/data/
+recommendation_service/models/
+
+# Node
+node_modules/
+.next/
+
+# Env
+.env.local
+
+recommendation_service/build_taxonomy_png.py
+recommendation_service/taxonomy_recommender_systems.png

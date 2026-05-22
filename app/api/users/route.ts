@@ -16,7 +16,7 @@ export async function GET(req: Request) {
 
   const sortOption = sort ? { username: sort } : undefined;
 
-  const users = await User.find(filter).sort(sortOption);
+  const users = await User.find(filter).sort(sortOption).select("-passwordHash");
   return NextResponse.json(users);
 }
 

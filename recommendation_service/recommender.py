@@ -11,7 +11,7 @@ print("[recommender] Завантаження моделей...")
 with open(os.path.join(MDL_DIR, "content_model.pkl"), "rb") as f:
     content_model = pickle.load(f)
 
-with open(os.path.join(MDL_DIR, "collab_model.pkl"), "rb") as f:
+with open(os.path.join(MDL_DIR, "collab_model_mongodb.pkl"), "rb") as f:
     collab_model = pickle.load(f)
 
 with open(os.path.join(MDL_DIR, "best_weights.pkl"), "rb") as f:
@@ -44,9 +44,25 @@ def get_content_scores(
 
     return scores
 
-def get_collab_scores(mongo_events: list[dict]) -> np.ndarray:
-    """Collab scores — завжди нулі: реальні MongoDB ObjectId ніколи не збігаються з Last.fm dataset."""
-    return np.zeros(len(mongo_events))
+def get_collab_scores(user_id: str, mongo_events: list[dict]) -> np.ndarray:
+    """Collab scores з SVD матриці, навченої на реальних MongoDB participants."""
+    scores = np.zeros(len(mongo_events))
+
+    user2idx        = collab_model["user2idx"]
+    event2idx       = collab_model["event2idx"]
+    predicted_scores = collab_model["predicted_scores"]
+
+    if user_id not in user2idx:
+        return scores  # cold-start: юзер не має взаємодій у тренувальних даних
+
+    user_row = predicted_scores[user2idx[user_id]]  # вектор довжиною n_events
+
+    for i, event in enumerate(mongo_events):
+        eid = str(event.get("_id", ""))
+        if eid in event2idx:
+            scores[i] = user_row[event2idx[eid]]
+
+    return scores
 
 def get_recommendations(
     user_interests: list[str],
@@ -78,7 +94,7 @@ def get_recommendations(
 
     # Content і collab scores
     c_scores = get_content_scores(user_interests, mongo_events)
-    f_scores = get_collab_scores(mongo_events)
+    f_scores = get_collab_scores(user_id, mongo_events)
 
     # Нормалізація
     c_scores = minmax(c_scores)

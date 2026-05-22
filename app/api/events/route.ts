@@ -2,6 +2,8 @@ import { connectDB } from "@/lib/mongodb";
 import Event from "@/lib/models/Event";
 import User from "@/lib/models/User";
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 
 export async function GET(req: Request) {
   await connectDB();
@@ -18,9 +20,10 @@ export async function GET(req: Request) {
   }
 
   if (search) {
+    const safeSearch = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     filter.$or = [
-      { title: { $regex: search, $options: "i" } }, // Шукаємо в назві
-      { tags: { $in: [new RegExp(search, "i")] } }  // АБО в тегах
+      { title: { $regex: safeSearch, $options: "i" } }, // Шукаємо в назві
+      { tags: { $in: [new RegExp(safeSearch, "i")] } }  // АБО в тегах
     ];
   }
 
@@ -41,25 +44,30 @@ if (sort === "date_asc") {
 }
 
 export async function POST(req: Request) {
-  await connectDB();
-  const { title, date, userId, tags, description } = await req.json();
+  const token = (await cookies()).get("token")?.value;
+  if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  if (!title || !date || !userId) {
-    return NextResponse.json(
-      { error: "Title, date, and userId are required" },
-      { status: 400 }
-    );
+  let decoded: { userId: string };
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string };
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const userExists = await User.findById(userId);
-  if (!userExists) {
-    return NextResponse.json({ error: "Invalid userId" }, { status: 400 });
+  await connectDB();
+  const { title, date, tags, description } = await req.json();
+
+  if (!title || !date) {
+    return NextResponse.json(
+      { error: "Title and date are required" },
+      { status: 400 }
+    );
   }
 
   const newEvent = new Event({
     title,
     date: new Date(date),
-    userId, 
+    userId: decoded.userId,
     tags: tags,
     description });
   const savedEvent = await newEvent.save();

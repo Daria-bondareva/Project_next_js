@@ -13,7 +13,6 @@ export default function NewEventPage() {
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState<string[]>([]); // +++ Додаємо стан для тегів
-  const [userId, setUserId] = useState("");
   const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -29,7 +28,6 @@ export default function NewEventPage() {
     if (!res.ok) throw new Error("Not authenticated");
 
     const { user } = await res.json();
-    setUserId(user._id); // або user._id, залежно від структури
   } catch (err) {
     router.push("/frontend/login");
   } finally {
@@ -43,13 +41,8 @@ export default function NewEventPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-if (!userId) {
-    setError("Користувач не авторизований");
-    return;
-  }
-
     try {
-      await createEvent({ title, date, userId, tags: tags, description });
+      await createEvent({ title, date, tags: tags, description });
       router.push("/frontend/events");
     } catch (err) {
       setError("Не вдалося створити подію");

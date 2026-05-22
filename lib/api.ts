@@ -1,7 +1,5 @@
 // lib/api.ts
 
-const API_URL = "http://localhost:3000/api";
-
 // Функція для отримання користувачів
 // lib/api.ts
 
@@ -39,13 +37,13 @@ const fetchUserProfile = async (userId: string) => {
 export async function createEvent(data: {
   title: string;
   date: string;
-  userId: string;
   tags: string[];
   description?: string;
 }) {
-  const res = await fetch(`${API_URL}/events`, {
+  const res = await fetch("/api/events", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
     body: JSON.stringify(data),
   });
 

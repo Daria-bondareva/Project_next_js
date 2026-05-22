@@ -2,16 +2,23 @@ import { connectDB } from "@/lib/mongodb";
 import Event from "@/lib/models/Event";
 import { NextResponse } from "next/server";
 import User from "@/lib/models/User";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   await connectDB();
-  const event = await Event.findById(params.id).populate("userId");
+  const event = await Event.findById(params.id).populate("userId", "username");
   if (!event) return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json(event);
 }
 
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
+  const token = (await cookies()).get("token")?.value;
+  if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try { jwt.verify(token, process.env.JWT_SECRET!); }
+  catch { return NextResponse.json({ error: "Unauthorized" }, { status: 401 }); }
+
     await connectDB();
     const { title, date, userId, tags, description} = await req.json();
   
@@ -34,6 +41,11 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   
 
 export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+  const token = (await cookies()).get("token")?.value;
+  if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try { jwt.verify(token, process.env.JWT_SECRET!); }
+  catch { return NextResponse.json({ error: "Unauthorized" }, { status: 401 }); }
+
   await connectDB();
   await Event.findByIdAndDelete(params.id);
   return NextResponse.json({ message: "Event deleted" });

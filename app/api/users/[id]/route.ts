@@ -1,6 +1,8 @@
 import { connectDB } from "@/lib/mongodb";
 import User from "@/lib/models/User";
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   await connectDB();
@@ -10,6 +12,11 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 }
 
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
+  const token = (await cookies()).get("token")?.value;
+  if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try { jwt.verify(token, process.env.JWT_SECRET!); }
+  catch { return NextResponse.json({ error: "Unauthorized" }, { status: 401 }); }
+
     await connectDB();
   const { username, email, interests } = await req.json();
 
@@ -24,6 +31,11 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   
 
 export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+  const token = (await cookies()).get("token")?.value;
+  if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try { jwt.verify(token, process.env.JWT_SECRET!); }
+  catch { return NextResponse.json({ error: "Unauthorized" }, { status: 401 }); }
+
   await connectDB();
   await User.findByIdAndDelete(params.id);
   return NextResponse.json({ message: "User deleted" });
