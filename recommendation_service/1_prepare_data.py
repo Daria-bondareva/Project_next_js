@@ -1,4 +1,33 @@
+# =============================================================
+# КРОК 1 — Підготовка даних
+# =============================================================
+# Що робить цей файл:
+#   Бере два сирих датасети і будує три файли для навчання моделі.
+#
+# Вхідні дані (data/raw/):
+#   - tags.dat              — Last.fm: ID тегу → назва жанру (rock, pop, metal...)
+#   - user_artists.dat      — Last.fm: скільки разів юзер слухав артиста (вага)
+#   - user_taggedartists.dat— Last.fm: які теги юзер ставив артистам
+#   - event_dataset.csv     — події: Topic, Event Type, Location, Day of Week
+#
+# Що будує (data/processed/):
+#   - events.csv       — події з тегами (МУЗИКА, ВЕЧІР, IT...)
+#                        теги будуються з Topic + Event Type + Day of Week
+#   - users.csv        — юзери з інтересами
+#                        Last.fm жанри замінюються на наші теги через LASTFM_TAG_MAP
+#   - interactions.csv — оцінки юзер → подія через Jaccard similarity тегів
+#                        score = (спільні теги / всі теги) * середня вага прослуховувань
+#
+# Логіка підміни жанрів:
+#   Last.fm жанр "rock"    → наш тег МУЗИКА
+#   Last.fm жанр "chiptune"→ наш тег ІГРИ
+#   Topic "Technology"     → наш тег IT
+#   Day "Saturday"         → наш тег ОФЛАЙН
+#   (повна таблиця: LASTFM_TAG_MAP, TOPIC_TAG_MAP, EVENT_TYPE_TAG_MAP, DAY_FORMAT_MAP)
+# =============================================================
+
 import pandas as pd
+import numpy as np
 import os
 from collections import Counter
 
@@ -157,7 +186,7 @@ print(f"  колонки: {list(events_raw.columns)}")
 
 
 # ── Частина 4: Побудова events.csv ────────────────────────────
-print("\n🎵 Побудова events.csv...")
+print("\n Побудова events.csv...")
 
 # Беремо 10,000 рядків — достатньо для навчання
 events_raw = events_raw.sample(n=10000, random_state=42).reset_index(drop=True)
@@ -261,7 +290,7 @@ users_df.to_csv(os.path.join(OUT_DIR, "users.csv"), index=False)
 print(f"\n  users.csv збережено → {len(users_df):,} юзерів")
 
 # ── Частина 6: Побудова interactions.csv ──────────────────────
-print("\n🔗 Побудова interactions.csv...")
+print("\n Побудова interactions.csv...")
 
 import numpy as np
 
@@ -273,7 +302,7 @@ users_clean  = users_df.copy()
 # tags і interests вже є списками — парсинг не потрібен
 
 # Нормалізуємо weight → score [0, 1] через log
-user_artists["log_weight"] = np.log1p(user_artists["weight"])
+user_artists["log_weight"] = np.log1p(user_artists["weight"])  # type: ignore
 max_log = user_artists["log_weight"].max()
 user_artists["norm_weight"] = user_artists["log_weight"] / max_log
 

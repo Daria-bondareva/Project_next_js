@@ -1,3 +1,31 @@
+# =============================================================
+# КРОК 5 — Оцінка якості і підбір ваг гібриду
+# =============================================================
+# Що робить цей файл:
+#   Перевіряє наскільки добре працює гібридна система і знаходить
+#   оптимальне співвідношення content vs collab.
+#
+# Вхідні дані:
+#   - models/content_model.pkl  — cosine similarity між тренувальними подіями
+#   - models/collab_model.pkl   — SVD predicted scores
+#   - models/events_data.pkl    — теги тренувальних подій
+#   - data/processed/test_interactions.csv  — реальні взаємодії тестових юзерів
+#   - data/processed/users_clean.csv        — інтереси юзерів
+#
+# Як оцінює:
+#   Для кожного тестового юзера:
+#     1. Генерує топ-10 рекомендацій
+#     2. Порівнює з реальними взаємодіями юзера (test_interactions)
+#     3. Рахує Precision@10 і Recall@10
+#
+#   Precision@10 — скільки з 10 рекомендацій виявились правильними
+#   Recall@10    — скільки реальних взаємодій вдалось вгадати
+#   Coverage     — скільки унікальних подій система рекомендує загалом
+#
+# Перебирає комбінації ваг: (1.0/0.0), (0.8/0.2), (0.7/0.3)...
+# Зберігає найкращу комбінацію в: models/best_weights.pkl
+# =============================================================
+
 import numpy as np
 import pandas as pd
 import pickle
@@ -44,13 +72,11 @@ print(f"  Тестових взаємодій: {len(test_inter):,}")
 print(f"  Тестових юзерів:    {test_inter['user_id'].nunique():,}")
 
 # ── 2. Функції для генерації рекомендацій ─────────────────────
-def get_content_scores(user_interests, event2idx, similarity_matrix):
+def get_content_scores(user_interests, similarity_matrix):
     """Content-based score для юзера через його інтереси."""
     n_events = similarity_matrix.shape[0]
     scores   = np.zeros(n_events)
 
-    # Знаходимо події які відповідають інтересам юзера
-    # через теги з events_data
     for idx, tags in enumerate(events_data["tags"]):
         overlap = len(set(user_interests) & set(tags))
         if overlap > 0:
@@ -81,7 +107,7 @@ def get_hybrid_recommendations(
 
     # Content і collab scores
     c_scores = get_content_scores(
-        user_interests, event2idx, similarity_matrix
+        user_interests, similarity_matrix
     )
     f_scores = get_collab_scores(
         user_id, user2idx, predicted_scores

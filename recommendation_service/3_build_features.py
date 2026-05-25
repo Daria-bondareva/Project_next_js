@@ -1,3 +1,37 @@
+# =============================================================
+# КРОК 3 — Feature Engineering (побудова матриць)
+# =============================================================
+# Що робить цей файл:
+#   Перетворює очищені дані на числові матриці для ML моделей.
+#
+# Вхідні дані (data/processed/):
+#   - events_clean.csv, users_clean.csv, interactions_clean.csv (з кроку 2)
+#
+# Що будує:
+#   1. content_matrix (події × теги)
+#      Кожна подія представлена як вектор з 0 і 1 по 13 тегах.
+#      Наприклад: подія [МУЗИКА, ВЕЧІР] → [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]
+#      Використовується для cosine similarity між подіями (content модель).
+#
+#   2. interaction_matrix (юзери × події)
+#      Таблиця з Jaccard scores — наскільки кожен юзер підходить кожній події.
+#      Використовується для SVD (collab модель).
+#
+#   3. train/test split (80/20 по юзерах)
+#      80% юзерів → навчання моделі
+#      20% юзерів → перевірка якості в кроці 5
+#
+#   4. encoders.pkl — маппінги event_id/user_id → індекс в матриці
+#
+# Виходить (data/processed/):
+#   - content_matrix.npz        — sparse матриця подій
+#   - interaction_matrix.npz    — sparse матриця взаємодій (тільки train)
+#   - train_interactions.csv
+#   - test_interactions.csv
+# Виходить (models/):
+#   - encoders.pkl              — mlb, event2idx, user2idx, event_ids, user_ids
+# =============================================================
+
 import pandas as pd
 import numpy as np
 import ast
@@ -99,7 +133,7 @@ test_inter.to_csv(
 print(f"   train_interactions.csv і test_interactions.csv збережено")
 
 # ── 5. Interaction матриця (scipy sparse) ──────────────────────
-print("\n🔧 Побудова interaction матриці (юзери × події)...")
+print("\n Побудова interaction матриці (юзери × події)...")
 
 n_users  = len(user_ids)
 n_events = len(event_ids)
