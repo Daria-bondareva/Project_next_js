@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { createUser } from "@/lib/api";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import styles from "@/app/frontend/css/NewUserPage.module.css"
+import styles from "@/app/frontend/css/NewUserPage.module.css";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
 
 export default function NewUserPage() {
   const [username, setUsername] = useState("");
@@ -49,45 +50,37 @@ export default function NewUserPage() {
       <h1 className={styles.title}>Реєстрація</h1>
 
       <form onSubmit={handleSubmit} className={styles.form}>
-        <div>
-          <label className={styles.label}>Ім'я</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            className={styles.input}
-          />
-        </div>
-        <div>
-          <label className={styles.label}>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className={styles.input}
-          />
-        </div>
-        <div>
-          <label className={styles.label}>Пароль</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className={styles.input}
-          />
-        </div>
+        <Input
+          id="reg-username"
+          label="Ім'я"
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <Input
+          id="reg-email"
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <Input
+          id="reg-password"
+          label="Пароль"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
         {error && <p className={styles.error}>{error}</p>}
 
-        <button type="submit" className={styles.submit}
-        >
+        <Button type="submit" variant="primary" size="lg" style={{ width: "100%" }}>
           Створити
-        </button>
+        </Button>
       </form>
-
     </main>
   );
 }

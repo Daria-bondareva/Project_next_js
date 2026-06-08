@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from "@/app/frontend/css/EditEventPage.module.css"
+import styles from "@/app/frontend/css/EditEventPage.module.css";
 import { ALL_TAGS } from "@/lib/constants";
 import TagSelectionModal from "@/components/TagSelectionModal";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
+import Badge from "@/components/ui/Badge";
 
 export default function EditEventPage({ params }: { params: { id: string } }) {
   const [title, setTitle] = useState('');
@@ -25,7 +28,7 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
 
       const data = await res.json();
       setTitle(data.title);
-      setDate(new Date(data.date).toISOString().slice(0, 16)); // Для input type="datetime-local"
+      setDate(new Date(data.date).toISOString().slice(0, 16));
       setTags(data.tags || []);
       setDescription(data.description || "");
     };
@@ -38,9 +41,7 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
 
     const res = await fetch(`/api/events/${params.id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title, date, tags, description }),
     });
 
@@ -51,91 +52,76 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
     }
   };
 
- return (
+  return (
     <main className={styles.container}>
       <h1 className={styles.title}>Редагувати подію</h1>
+
       <form onSubmit={handleSubmit} className={styles.form}>
-        <div>
-          <label className={styles.label}>Назва</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className={styles.input}
-            required
-          />
-        </div>
-        <div>
-          <label className={styles.label}>Дата</label>
-          <input
-            type="datetime-local"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className={styles.input}
-            required
-          />
-        </div>
-
-        <div>
-          <label className={styles.label}>Опис</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className={styles.input} // Використовуємо той самий клас, щоб стиль рамок був однаковим
-            rows={5} // Висота у рядках
-            placeholder="Розкажіть детальніше про подію..."
-            style={{
-                height: 'auto', 
-                minHeight: '100px', 
-                resize: 'vertical', 
-                padding: '10px',
-                fontFamily: 'inherit' // Щоб шрифт не відрізнявся
-            }}
-          />
-        </div>
-
-        <div style={{ marginBottom: '20px' }}>
-            <label className={styles.label}>Теги</label>
-            
-            {/* Відображення пігулок */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '10px', marginTop: '5px' }}>
-                {tags.length > 0 ? tags.map(tag => (
-                    <span key={tag} style={{
-                        background: '#e0e7ff', color: '#3730a3', 
-                        padding: '6px 12px', borderRadius: '20px', 
-                        fontSize: '0.9rem', fontWeight: '500'
-                    }}>
-                        #{tag}
-                    </span>
-                )) : <span style={{ color: '#888', fontStyle: 'italic' }}>Теги не обрано</span>}
-            </div>
-
-            {/* Кнопка відкриття модалки */}
-            <button 
-                type="button" 
-                onClick={() => setIsModalOpen(true)}
-                // Використовуємо стиль інпуту або кнопки, або інлайн для простоти
-                style={{
-                    padding: '8px 16px', borderRadius: '8px', border: '1px solid #ccc',
-                    background: 'white', cursor: 'pointer', width: '100%'
-                }}
-            >
-                 Редагувати теги
-            </button>
-        </div>
-
-          <TagSelectionModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            onSave={(selected) => setTags(selected)}
-            initialSelected={tags}
-            allTags={ALL_TAGS}
-            title="Редагування тегів події"
+        <Input
+          id="edit-title"
+          label="Назва"
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+        <Input
+          id="edit-date"
+          label="Дата"
+          type="datetime-local"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          required
         />
 
-        <button type="submit" className={styles.button}>
+        <div>
+          <label htmlFor="edit-description" className={styles.label}>
+            Опис
+          </label>
+          <textarea
+            id="edit-description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className={styles.textarea}
+            rows={5}
+            placeholder="Розкажіть детальніше про подію..."
+          />
+        </div>
+
+        <div>
+          <label className={styles.label}>Теги</label>
+          <div className={styles.tagRow}>
+            {tags.length > 0 ? (
+              tags.map((tag) => (
+                <Badge key={tag} variant="filled">#{tag}</Badge>
+              ))
+            ) : (
+              <span className={styles.noTags}>Теги не обрано</span>
+            )}
+          </div>
+          <Button
+            type="button"
+            variant="secondary"
+            size="md"
+            style={{ width: "100%" }}
+            onClick={() => setIsModalOpen(true)}
+          >
+            Редагувати теги
+          </Button>
+        </div>
+
+        <TagSelectionModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSave={(selected) => setTags(selected)}
+          initialSelected={tags}
+          allTags={ALL_TAGS}
+          title="Редагування тегів події"
+        />
+
+        <Button type="submit" variant="primary" size="lg" style={{ width: "100%" }}>
           Зберегти
-        </button>
+        </Button>
       </form>
     </main>
   );

@@ -1,60 +1,74 @@
 .container {
   max-width: 480px;
-  margin: 60px auto;
-  padding: 30px 25px;
-  background-color: #fdfdfb;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  border: 1px solid #eee8dc;
+  margin: var(--space-12) auto;
+  padding: var(--space-6);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
 }
 
 .title {
-  font-size: 24px;
-  font-weight: 700;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
   text-align: center;
-  color: #222;
-  margin-bottom: 24px;
+  color: var(--color-text);
+  margin-bottom: var(--space-6);
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--space-6);
 }
 
+/* Використовується тільки для label над textarea і тегами */
 .label {
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 8px;
-  color: #444;
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text);
+  margin-bottom: var(--space-1);
+  line-height: var(--leading-tight);
 }
 
-.input {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  font-size: 15px;
-  background-color: #fff;
-  transition: border-color 0.2s;
-}
-
-.input:focus {
-  border-color: #fb9b0b;
+/* textarea — Input component не охоплює textarea */
+.textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  resize: vertical;
   outline: none;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
-.button {
-  background-color: #3b82f6;
-  color: white;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: 500;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+.textarea::placeholder {
+  color: var(--color-text-muted);
 }
 
-.button:hover {
-  background-color: #2563eb;
+.textarea:focus {
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px var(--color-primary-100);
+}
+
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  margin-top: var(--space-1);
+}
+
+.noTags {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  font-style: italic;
 }

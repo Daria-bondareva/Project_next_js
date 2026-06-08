@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import styles from "@/app/frontend/css/LoginPage.module.css"
+import styles from "@/app/frontend/css/LoginPage.module.css";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -32,34 +34,38 @@ export default function LoginPage() {
   return (
     <main className={styles.container}>
       <h1 className={styles.title}>Вхід</h1>
+
       <form onSubmit={handleLogin} className={styles.form}>
-        <input
+        <Input
+          id="login-username"
+          label="Ім'я користувача"
           type="text"
-          placeholder="Ім'я користувача"
+          placeholder="Введіть ім'я"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className={styles.input}
         />
-        <input
+        <Input
+          id="login-password"
+          label="Пароль"
           type="password"
-          placeholder="Пароль"
+          placeholder="Введіть пароль"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className={styles.input}
         />
-        {error && <p className={styles.error}>{error}</p>}
-        <button type="submit" className={styles.button}>
-          Увійти
-        </button>
-      </form>
-      
-      <p className={styles.registerLink}>
-  Не маєте акаунта?{" "}
-  <Link href="/frontend/users/new" className={styles.link}>
-    Зареєструватися
-  </Link>
-</p>
 
+        {error && <p className={styles.error}>{error}</p>}
+
+        <Button type="submit" variant="primary" size="lg" style={{ width: "100%" }}>
+          Увійти
+        </Button>
+      </form>
+
+      <p className={styles.registerLink}>
+        Не маєте акаунта?{" "}
+        <Link href="/frontend/users/new" className={styles.link}>
+          Зареєструватися
+        </Link>
+      </p>
     </main>
   );
 }
