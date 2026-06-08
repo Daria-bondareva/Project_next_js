@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchEvents } from "@/lib/api";
+import { Calendar, User } from "lucide-react";
 import styles from "./Home.module.css";
-// Виправили назву імпорту для ясності
-import cardStyles from "./frontend/css/EventCard.module.css"; 
+import cardStyles from "./frontend/css/EventCard.module.css";
+import Badge from "@/components/ui/Badge";
+import Button from "@/components/ui/Button";
 import Image from "next/image";
 
 type Event = {
@@ -70,42 +72,44 @@ export default function HomePage() {
     checkAuth();
   }, []);
 
-  // Функція для рендерингу однієї картки (щоб не дублювати код)
+  // Функція для рендерингу однієї картки — ідентична events/page.tsx
   const renderCard = (e: Event) => (
     <li key={e._id} className={cardStyles.card}>
-        {/* Заголовок */}
+      <div className={cardStyles.cardBody}>
         <h3 className={cardStyles.cardHeader}>{e.title}</h3>
 
-        {/* Теги */}
         {e.tags && e.tags.length > 0 && (
-            <div className={cardStyles.tagsContainer}>
-                {e.tags.slice(0, 3).map(t => (
-                    <span key={t} className={cardStyles.tag}>#{t}</span>
-                ))}
-                {e.tags.length > 3 && <span className={cardStyles.tag}>+{e.tags.length - 3}</span>}
-            </div>
+          <div className={cardStyles.tagsContainer}>
+            {e.tags.slice(0, 3).map((t) => (
+              <Badge key={t} variant="filled">#{t}</Badge>
+            ))}
+            {e.tags.length > 3 && (
+              <Badge variant="outline">+{e.tags.length - 3}</Badge>
+            )}
+          </div>
         )}
 
-        {/* Дата */}
         <p className={cardStyles.cardContent}>
-            <span>📅</span> 
-            {new Date(e.date).toLocaleDateString('uk-UA', { 
-                day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' 
-            })}
+          <Calendar size={14} />
+          {new Date(e.date).toLocaleDateString("uk-UA", {
+            day: "numeric", month: "long", hour: "2-digit", minute: "2-digit",
+          })}
         </p>
 
-        {/* Автор */}
         <p className={cardStyles.cardUser}>
-            <span>👤</span> 
-            {e.userId?.username || 'Гість'}
+          <User size={14} />
+          {e.userId?.username || "Гість"}
         </p>
+      </div>
 
-        {/* Кнопка */}
-        <div style={{ marginTop: 'auto' }}>
-            <a href={`/frontend/events/${e._id}`} className={cardStyles.viewButton}>
-                Детальніше
-            </a>
-        </div>
+      <Button
+        variant="secondary"
+        size="sm"
+        href={`/frontend/events/${e._id}`}
+        style={{ width: "100%" }}
+      >
+        Детальніше
+      </Button>
     </li>
   );
 

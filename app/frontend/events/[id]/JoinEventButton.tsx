@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import styles from "@/app/frontend/css/EventButtons.module.css"
+import Button from "@/components/ui/Button";
+import styles from "@/app/frontend/css/EventButtons.module.css";
 
 export default function JoinEventButton({ eventId }: { eventId: string }) {
   const [joined, setJoined] = useState(false);
@@ -45,8 +46,8 @@ export default function JoinEventButton({ eventId }: { eventId: string }) {
       <div className={styles.container}>
         <p className={styles.authorNote}>Ви є автором цієї події.</p>
         {participants.length > 0 ? (
-          <div className="mt-2">
-            <p className="font-medium">Учасники події:</p>
+          <div>
+            <p className={styles.participantsTitle}>Учасники події:</p>
             <ul className={styles.participantsList}>
               {participants.map((name, idx) => (
                 <li key={idx} className={styles.participantItem}>{name}</li>
@@ -63,19 +64,13 @@ export default function JoinEventButton({ eventId }: { eventId: string }) {
   return (
     <div className={styles.container}>
       {joined ? (
-        <button
-          onClick={handleLeave}
-          className={`${styles.button} ${styles.leave}`}
-        >
+        <Button variant="danger" size="md" onClick={handleLeave}>
           Вийти з події
-        </button>
+        </Button>
       ) : (
-        <button
-          onClick={handleJoin}
-          className={`${styles.button} ${styles.join}`}
-        >
+        <Button variant="primary" size="md" onClick={handleJoin}>
           Прийняти участь
-        </button>
+        </Button>
       )}
       {message && <p className={styles.message}>{message}</p>}
     </div>

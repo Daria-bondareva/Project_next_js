@@ -1,11 +1,13 @@
 import { notFound } from "next/navigation";
 import { connectDB } from "@/lib/mongodb";
 import Event from "@/lib/models/Event";
-import JoinEventButton from "./JoinEventButton"; 
+import JoinEventButton from "./JoinEventButton";
 import DeleteEventButton from "./DeleteEventButton";
-import { getCurrentUser } from "@/lib/getCurrentUser"; 
-import styles from "@/app/frontend/css/EventDetails.module.css"
+import { getCurrentUser } from "@/lib/getCurrentUser";
+import styles from "@/app/frontend/css/EventDetails.module.css";
 import BackButton from "./BackButton";
+import Badge from "@/components/ui/Badge";
+import Button from "@/components/ui/Button";
 
 type EventType = {
   _id: string;
@@ -15,11 +17,10 @@ type EventType = {
     _id: string;
     username: string;
   };
-  participants: string[]; 
+  participants: string[];
   tags: string[];
   description?: string;
 };
-
 
 export default async function EventDetailsPage({ params }: { params: { id: string } }) {
   await connectDB();
@@ -35,54 +36,51 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
 
   return (
     <div className={styles.pageWrapper}>
-  <BackButton />
-    <main className={styles.wrapper}>
-      
-      <h1 className={styles.title}>{event.title}</h1>
-      <p className={styles.text}><strong>Дата:</strong> {new Date(event.date).toLocaleString()}</p>
+      <BackButton />
 
-      {!isAuthor && (
+      <main className={styles.wrapper}>
+        <h1 className={styles.title}>{event.title}</h1>
+
         <p className={styles.text}>
-          <strong>Автор:</strong> {event.userId.username}
+          <strong>Дата:</strong> {new Date(event.date).toLocaleString("uk-UA")}
         </p>
-      )}
 
-      {event.description && (
-            <div style={{marginTop: '20px', padding: '15px', background: '#f9f9f9', borderRadius: '8px'}}>
-                <h3 style={{fontSize: '1.1rem', marginBottom: '10px'}}>Про подію:</h3>
-                <p style={{whiteSpace: 'pre-wrap', lineHeight: '1.5', color: '#444'}}>
-                    {event.description}
-                </p>
-            </div>
+        {!isAuthor && (
+          <p className={styles.text}>
+            <strong>Автор:</strong> {event.userId.username}
+          </p>
         )}
 
-      {/* +++ 2. ДОДАЙТЕ ЦЕЙ БЛОК ДЛЯ ВІДОБРАЖЕННЯ ТЕГІВ +++ */}
+        {event.description && (
+          <div className={styles.descriptionBlock}>
+            <h3 className={styles.descriptionTitle}>Про подію:</h3>
+            <p className={styles.descriptionText}>{event.description}</p>
+          </div>
+        )}
+
         {event.tags && event.tags.length > 0 && (
-          // Вам потрібно буде створити стилі для .tagContainer та .tag
-          <div className={styles.tagContainer}> 
+          <div className={styles.tagContainer}>
             {event.tags.map((tag: string) => (
-              <span key={tag} className={styles.tag}>
-                #{tag}
-              </span>
+              <Badge key={tag} variant="filled">#{tag}</Badge>
             ))}
           </div>
         )}
-        {/* +++ КІНЕЦЬ БЛОКУ ТЕГІВ +++ */}
-      <JoinEventButton eventId={String(event._id)} />
 
-{isAuthor && (
-  <div className={styles.actions}>
-    <a
-      href={`/frontend/events/${event._id}/edit`}
-      className={styles.editButton}
-    >
-      Редагувати
-    </a>
-    <DeleteEventButton eventId={String(event._id)} />
-  </div>
-)}
+        <JoinEventButton eventId={String(event._id)} />
 
-    </main>
+        {isAuthor && (
+          <div className={styles.actions}>
+            <Button
+              variant="secondary"
+              size="md"
+              href={`/frontend/events/${event._id}/edit`}
+            >
+              Редагувати
+            </Button>
+            <DeleteEventButton eventId={String(event._id)} />
+          </div>
+        )}
+      </main>
     </div>
   );
 }

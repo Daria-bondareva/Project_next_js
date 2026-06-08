@@ -1,61 +1,40 @@
 .container {
-  margin-top: 1rem;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.message {
-  margin-top: 0.5rem;
-  font-size: 0.875rem;
-  color: #555;
-}
-
-.button {
-  padding: 10px 20px;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  transition: background-color 0.3s ease;
-  color: white;
-  user-select: none;
-}
-
-.join {
-  background-color: #22c55e; /* зеленуватий */
-}
-
-.join:hover {
-  background-color: #16a34a;
-}
-
-.leave {
-  background-color: #dc2626; /* червоний */
-}
-
-.leave:hover {
-  background-color: #b91c1c;
+  margin-top: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
 .authorNote {
-  color: #2563eb; /* синій */
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  color: var(--color-primary-600);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-sm);
+}
+
+.participantsTitle {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text);
+  margin-bottom: var(--space-1);
 }
 
 .participantsList {
-  margin-top: 0.5rem;
-  padding-left: 1.25rem;
-  color: #334155;
+  padding-left: var(--space-4);
+  color: var(--color-text-secondary);
 }
 
 .participantItem {
-  margin-bottom: 0.25rem;
-  font-size: 0.9rem;
+  margin-bottom: var(--space-1);
+  font-size: var(--text-sm);
 }
 
 .noParticipants {
-  margin-top: 0.5rem;
-  font-size: 0.875rem;
-  color: #64748b;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
   font-style: italic;
+}
+
+.message {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
 }

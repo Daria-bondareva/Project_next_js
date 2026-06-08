@@ -1,107 +1,71 @@
-.wrapper {
-  width: 700px;
-  margin: 40px 0;
-  padding: 32px;
-  border-radius: 20px;
-  background-color: #f4faff;
-  border: 3px solid #58d1de;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-}
-
 .pageWrapper {
   display: flex;
-  align-items: flex-start; /* вирівнюємо по верхньому краю */
-  gap: 20px; /* відстань між кнопкою і карткою */
+  align-items: flex-start;
+  gap: var(--space-4);
   justify-content: center;
-  margin: 40px auto;
-  padding: 0 20px;
-  max-width: 1900px;
+  margin: var(--space-8) auto;
+  padding: 0 var(--space-6);
+  max-width: 900px;
+}
+
+.wrapper {
+  flex: 1;
+  max-width: 680px;
+  margin: 0;
+  padding: var(--space-8);
+  border-radius: var(--radius-xl);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
 }
 
 .title {
-  font-size: 28px;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 20px;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
 }
 
 .text {
-  font-size: 16px;
-  margin-bottom: 10px;
-  color: #334155;
+  font-size: var(--text-base);
+  margin-bottom: var(--space-3);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-normal);
+}
+
+.descriptionBlock {
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.descriptionTitle {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+}
+
+.descriptionText {
+  white-space: pre-wrap;
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-secondary);
+  font-size: var(--text-base);
+}
+
+.tagContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-2);
 }
 
 .actions {
-  margin-top: 30px;
+  margin-top: var(--space-6);
   display: flex;
-  gap: 12px;
+  gap: var(--space-3);
   flex-wrap: wrap;
-}
-
-.editButton {
-  background-color: #fbbf24;
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 12px;
-  font-weight: bold;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-
-.editButton:hover {
-  background-color: #f59e0b;
-}
-
-.container {
-  position: relative;
-}
-
-.backButton {
-  /* top: 1rem;
-  left: 1rem; */
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: none;
-  background-color: #fb9b0b;
-  color: white;
-  font-size: 1.5rem;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgb(0 0 0 / 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s ease;
-  user-select: none;
-}
-
-.backButton:hover {
-  background-color: #fb870b;
-}
-
-.backButtonWrapper {
-  margin-top: 40px; /* відступ зверху, щоб кнопка була явно нижче */
-  display: flex;
-  justify-content: flex-start; /* кнопка ліворуч */
-}
-
-/* Клас для контейнера, щоб теги могли переноситись */
-.tagContainer {
-  display: flex;
-  flex-wrap: wrap; /* Дозволяє тегам переноситись на новий рядок */
-  margin-top: 10px; /* Відступ зверху від дати/автора */
-  margin-bottom: 10px; /* Відступ знизу до кнопок */
-}
-
-/* Клас для самого тегу */
-.tag {
-  background-color: #e0e0e0; /* Приклад фону (змініть на свій) */
-  color: #333; /* Приклад кольору тексту */
-  padding: 4px 8px; /* Внутрішній відступ */
-  border-radius: 12px; /* Округлення кутів */
-  font-size: 0.9em; /* Трохи менший шрифт */
-
-  /* --- ВАЖЛИВІ РЯДКИ --- */
-  margin-right: 8px; /* Відступ ПРАВОРУЧ */
-  margin-bottom: 8px; /* Відступ ЗНИЗУ (для переносу рядків) */
 }

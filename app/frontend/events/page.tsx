@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { fetchEvents } from "@/lib/api";
-import Link from "next/link";
-import style1 from "@/app/frontend/css/EventCard.module.css";
-import styles from "@/app/Home.module.css";
-import styles2 from "@/app/frontend/css/PageEvents.module.css"
+import { Calendar, User, ArrowUp, ArrowDown } from "lucide-react";
+import pageStyles from "@/app/frontend/css/PageEvents.module.css";
+import cardStyles from "@/app/frontend/css/EventCard.module.css";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
+import Badge from "@/components/ui/Badge";
 
 type Event = {
   _id: string;
@@ -25,8 +27,7 @@ export default function EventsPage() {
   const [sortField, setSortField] = useState<"title" | "date">("title");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [loading, setLoading] = useState(true);
-  const sortOrder = `${sortField}_${sortDirection}`; // наприклад title_asc або date_desc
-
+  const sortOrder = `${sortField}_${sortDirection}`;
 
   useEffect(() => {
     const loadEvents = async () => {
@@ -48,78 +49,85 @@ export default function EventsPage() {
   };
 
   return (
-    <main className="max-w-3xl mx-auto p-4 space-y-6">
-      <h1 className={`${styles2.pageTitle} ${styles.title}`}>Список подій</h1>
+    <main className={pageStyles.page}>
+      <h1 className={pageStyles.pageTitle}>Список подій</h1>
 
-  <div className={styles2.filterPanel}>
-  <input
-    type="text"
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-    placeholder="Пошук за назвою..."
-    className={styles2.filterInput}
-  />
-  <button
-    onClick={handleSearch}
-    className={styles2.filterButton}
-  >
-    Пошук
-  </button>
+      <div className={pageStyles.filterPanel}>
+        <div className={pageStyles.searchWrapper}>
+          <Input
+            id="events-search"
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            placeholder="Пошук за назвою або тегом..."
+          />
+        </div>
 
-  <button
-    onClick={() => setSortField((prev) => (prev === "title" ? "date" : "title"))}
-    className={styles2.filterButton}
-  >
-    Сортувати за: {sortField === "title" ? "Назвою" : "Датою"}
-  </button>
+        <Button variant="primary" size="md" onClick={handleSearch}>
+          Пошук
+        </Button>
 
-  <button
-    onClick={() => setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"))}
-    className={styles2.filterButton}
-  >
-    {sortDirection === "asc" ? "↑" : "↓"}
-  </button>
-</div>
+        <Button
+          variant="secondary"
+          size="md"
+          onClick={() => setSortField((prev) => (prev === "title" ? "date" : "title"))}
+        >
+          {sortField === "title" ? "За назвою" : "За датою"}
+        </Button>
 
+        <Button
+          variant="ghost"
+          size="md"
+          onClick={() => setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"))}
+        >
+          {sortDirection === "asc"
+            ? <><ArrowUp size={14} /> Зростання</>
+            : <><ArrowDown size={14} /> Спадання</>}
+        </Button>
+      </div>
 
       {loading ? (
-        <p>Завантаження...</p>
+        <p className={pageStyles.stateText}>Завантаження...</p>
       ) : events.length === 0 ? (
-        <p>Немає подій.</p>
+        <p className={pageStyles.stateText}>Немає подій.</p>
       ) : (
-        <ul className={style1.cardList}>
+        <ul className={cardStyles.cardList}>
           {events.map((event) => (
-            <li key={event._id} className={style1.card}>
-              <h3 className={style1.cardHeader}>{event.title}</h3>
-              <div style={{display:'flex', gap:'5px', margin:'5px 0', flexWrap:'wrap'}}>
-                {event.tags?.map(t => (
-                    <span key={t} style={{
-                        fontSize:'0.75em', 
-                        background:'#eef2ff', // Світло-фіолетовий фон
-                        color:'#4f46e5',      // Темно-фіолетовий текст
-                        padding:'2px 8px', 
-                        borderRadius:'10px', 
-                        fontWeight: '500'
-                    }}>
-                        #{t}
-                    </span>
-                ))}
+            <li key={event._id} className={cardStyles.card}>
+              <div className={cardStyles.cardBody}>
+                <h3 className={cardStyles.cardHeader}>{event.title}</h3>
+
+                {event.tags && event.tags.length > 0 && (
+                  <div className={cardStyles.tagsContainer}>
+                    {event.tags.map((t) => (
+                      <Badge key={t} variant="filled">#{t}</Badge>
+                    ))}
+                  </div>
+                )}
+
+                <p className={cardStyles.cardContent}>
+                  <Calendar size={14} />
+                  {new Date(event.date).toLocaleDateString("uk-UA")}
+                </p>
+                <p className={cardStyles.cardUser}>
+                  <User size={14} />
+                  {event.userId?.username || "Невідомо"}
+                </p>
               </div>
-              <p className={style1.cardContent}>Дата: {new Date(event.date).toLocaleDateString()}</p>
-              <p className={style1.cardUser}>Автор: {event.userId?.username || "Невідомо"}</p>
-              <a href={`/frontend/events/${event._id}`} className={style1.viewButton}>
-            Переглянути
-            </a>
+
+              <Button
+                variant="secondary"
+                size="sm"
+                href={`/frontend/events/${event._id}`}
+                style={{ width: "100%" }}
+              >
+                Детальніше
+              </Button>
             </li>
           ))}
         </ul>
       )}
-
-      <Link href="/">
-        <button className={style1.viewButton}>
-          Назад до головної
-        </button>
-      </Link>
     </main>
   );
 }

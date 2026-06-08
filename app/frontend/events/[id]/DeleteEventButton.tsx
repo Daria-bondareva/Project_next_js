@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import styles from "@/app/frontend/css/EventButtons.module.css"
+import Button from "@/components/ui/Button";
 
 export default function DeleteEventButton({ eventId }: { eventId: string }) {
   const router = useRouter();
@@ -16,18 +16,15 @@ export default function DeleteEventButton({ eventId }: { eventId: string }) {
 
     if (res.ok) {
       alert('Подію видалено');
-      router.push('/frontend/events'); // зміни шлях, якщо список подій в іншому місці
+      router.push('/frontend/events');
     } else {
       alert('Помилка при видаленні події');
     }
   };
 
   return (
-    <button
-      onClick={handleDelete}
-      className={`${styles.button} ${styles.leave}`}
-    >
+    <Button variant="danger" size="md" onClick={handleDelete}>
       Видалити
-    </button>
+    </Button>
   );
 }

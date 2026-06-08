@@ -1,128 +1,73 @@
-/* app/frontend/css/EventCard.module.css */
-
 .cardList {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
+  gap: var(--space-6);
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
 .card {
-  background: #ffffff; /* Білий фон замість кольорового */
-  border-radius: 16px; /* Більше округлення */
-  padding: 24px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  /* Тінь замість рамки - дає глибину */
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
-    0 10px 15px -3px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(0, 0, 0, 0.05); /* Ледь помітна рамка */
-  position: relative;
-  overflow: hidden;
+  gap: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base),
+    border-color var(--transition-base);
+  /* ::before (тіл-смужка) видалено */
 }
 
-/* Ефект при наведенні - картка "підстрибує" */
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
-    0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  border-color: #4ecdc4; /* Ваш брендовий колір при ховері */
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary-300);
 }
 
-/* Декоративна смужка зверху (опціонально, додає брендовості) */
-.card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 6px;
-  background: linear-gradient(
-    90deg,
-    #4ecdc4,
-    #556270
-  ); /* Градієнт ваших кольорів */
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: 1;
 }
 
 .cardHeader {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #1a202c; /* Темно-сірий, майже чорний */
-  margin-bottom: 12px;
-  line-height: 1.4;
-  /* Обрізаємо заголовок, якщо він занадто довгий */
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--color-text);
+  line-height: var(--leading-tight);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.cardContent {
-  font-size: 0.9rem;
-  color: #64748b; /* Спокійний сірий для тексту */
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.cardUser {
-  font-size: 0.85rem;
-  color: #94a3b8; /* Світло-сірий для автора */
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 500;
-}
-
-/* Стиль для тегів */
 .tagsContainer {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 20px;
+  gap: var(--space-1);
+  margin: var(--space-1) 0;
 }
 
-.tag {
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 20px;
-  background-color: #f1f5f9; /* Дуже світлий сірий фон */
-  color: #475569;
-  transition: background-color 0.2s;
-}
-
-.card:hover .tag {
-  background-color: #e0f2fe; /* Світло-блакитний при наведенні на картку */
-  color: #0284c7;
-}
-
-/* Кнопка */
-.viewButton {
-  display: inline-flex;
-  justify-content: center;
+.cardContent {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  display: flex;
   align-items: center;
-  width: 100%;
-  padding: 10px 16px;
-  background-color: #f8fafc;
-  color: #0f172a;
-  font-weight: 600;
-  border-radius: 8px;
-  text-decoration: none;
-  border: 1px solid #e2e8f0;
-  transition: all 0.2s;
+  gap: var(--space-2);
 }
 
-.viewButton:hover {
-  background-color: #4ecdc4; /* Ваш колір */
-  color: white;
-  border-color: #4ecdc4;
-  box-shadow: 0 4px 6px -1px rgba(78, 205, 196, 0.3);
+.cardUser {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: var(--font-medium);
 }

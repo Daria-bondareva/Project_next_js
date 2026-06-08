@@ -1,19 +1,21 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import styles from "@/app/frontend/css/EventDetails.module.css"; // або будь-який твій css
+import { ArrowLeft } from "lucide-react";
+import Button from "@/components/ui/Button";
 
 export default function BackButton() {
   const router = useRouter();
 
   return (
-    <button
+    <Button
+      variant="ghost"
+      size="sm"
       onClick={() => router.back()}
-      className={styles.backButton}
       aria-label="Повернутися назад"
-      title="Повернутися назад"
     >
-      ←
-    </button>
+      <ArrowLeft size={16} />
+      Назад
+    </Button>
   );
 }
