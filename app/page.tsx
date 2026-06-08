@@ -3,12 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchEvents } from "@/lib/api";
-import { Calendar, User } from "lucide-react";
+import { Calendar, User, Sparkles } from "lucide-react";
 import styles from "./Home.module.css";
 import cardStyles from "./frontend/css/EventCard.module.css";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
-import Image from "next/image";
 
 type Event = {
   _id: string;
@@ -33,9 +32,9 @@ export default function HomePage() {
         const res = await fetch("/api/auth/me");
         const authStatus = res.ok;
         setIsLoggedIn(authStatus);
-        
+
         if (authStatus) {
-            loadRecommendations();
+          loadRecommendations();
         }
       } catch {
         setIsLoggedIn(false);
@@ -45,34 +44,31 @@ export default function HomePage() {
     const loadEvents = async () => {
       try {
         const ev = await fetchEvents("sort=date_desc");
-        setEvents(ev.slice(0, 5)); 
+        setEvents(ev.slice(0, 5));
       } catch (e) {
         console.error(e);
       }
     };
 
     const loadRecommendations = async () => {
-        setLoadingRecs(true);
-        try {
-            // Переконайтесь, що тут правильний порт (8002 для Real ML або 8000 для Гібридної)
-            // Або просто /api/recommendations, якщо ви налаштували route.ts
-            const res = await fetch('/api/recommendations'); 
-            if (res.ok) {
-                const data = await res.json();
-                setRecommendations(data);
-            }
-        } catch (e) {
-            console.error("Failed to load recs", e);
-        } finally {
-            setLoadingRecs(false);
+      setLoadingRecs(true);
+      try {
+        const res = await fetch('/api/recommendations');
+        if (res.ok) {
+          const data = await res.json();
+          setRecommendations(data);
         }
-    }
+      } catch (e) {
+        console.error("Failed to load recs", e);
+      } finally {
+        setLoadingRecs(false);
+      }
+    };
 
     loadEvents();
     checkAuth();
   }, []);
 
-  // Функція для рендерингу однієї картки — ідентична events/page.tsx
   const renderCard = (e: Event) => (
     <li key={e._id} className={cardStyles.card}>
       <div className={cardStyles.cardBody}>
@@ -116,73 +112,78 @@ export default function HomePage() {
   return (
     <main className="max-w-3xl mx-auto p-4 space-y-6">
 
-      {/* --- БАНЕР --- */}
+      {/* --- HERO --- */}
       {isLoggedIn === false && (
         <div className={styles.heroSection}>
-           <Image 
-             src="/ban_1_5.png" 
-             alt="Background" 
-             fill 
-             className={styles.heroImage}
-           />
-           <div className={styles.heroContent}>
-             <h1>Знайдіть своїх людей, відкрийте інтереси...</h1>
-             <Link href="/frontend/users/new"><button className={styles.heroButton}>Join to Kindred</button></Link>
-           </div>
+          <div className={styles.heroCircle1} />
+          <div className={styles.heroCircle2} />
+          <div className={styles.heroCircle3} />
+          <div className={styles.heroContent}>
+            <h1 className={styles.heroTitle}>
+              Знайдіть своїх людей,<br />відкрийте інтереси...
+            </h1>
+            <p className={styles.heroSubtitle}>
+              Платформа для тих, хто шукає однодумців та нових вражень.
+            </p>
+            <Link href="/frontend/users/new" className={styles.heroCta}>
+              Join to Kindred →
+            </Link>
+          </div>
         </div>
       )}
 
       {/* --- РЕКОМЕНДАЦІЇ --- */}
       {isLoggedIn && (
-        <section style={{marginBottom: '40px', marginTop: '20px'}}>
-            <h2 className={styles.title} style={{color: '#4f46e5'}}>🌟 Рекомендовано для вас</h2>
-            <p style={{fontSize: '0.9em', color: '#666', marginBottom: '15px'}}>
-                Підібрано на основі ваших інтересів та часу доби
-            </p>
+        <section style={{ marginBottom: '40px', marginTop: '20px' }}>
+          <h2 className={`${styles.title} ${styles.recsTitle}`}>
+            <Sparkles size={18} />
+            Рекомендовано для вас
+          </h2>
+          <p style={{ fontSize: '0.9em', color: 'var(--color-text-muted)', marginBottom: '15px' }}>
+            Підібрано на основі ваших інтересів
+          </p>
 
-            {loadingRecs ? (
-                <p>Завантаження рекомендацій...</p>
-            ) : recommendations.length > 0 ? (
-                <ul className={cardStyles.cardList}>
-                    {recommendations.map(renderCard)}
-                </ul>
-            ) : (
-                <div style={{padding: '20px', background: '#f9fafb', borderRadius: '8px', textAlign: 'center', border: '1px dashed #ccc'}}>
-                    <p>Поки що немає персональних рекомендацій.</p>
-                    <Link href="/frontend/profile" style={{color: '#4f46e5', textDecoration: 'underline'}}>
-                        Оновіть свої інтереси
-                    </Link>
-                </div>
-            )}
+          {loadingRecs ? (
+            <p>Завантаження рекомендацій...</p>
+          ) : recommendations.length > 0 ? (
+            <ul className={cardStyles.cardList}>
+              {recommendations.map(renderCard)}
+            </ul>
+          ) : (
+            <div style={{ padding: '20px', background: 'var(--color-surface)', borderRadius: 'var(--radius-lg)', textAlign: 'center', border: '1px dashed var(--color-border-strong)' }}>
+              <p>Поки що немає персональних рекомендацій.</p>
+              <Link href="/frontend/profile" style={{ color: 'var(--color-primary-600)', textDecoration: 'underline' }}>
+                Оновіть свої інтереси
+              </Link>
+            </div>
+          )}
         </section>
       )}
 
       {/* --- ПОПУЛЯРНІ ПОДІЇ --- */}
       <section>
-        <section className={styles.headerSection}>
-            <h2 className={styles.title}>Популярні події</h2>
-            <Link href="/frontend/events">
-                <button className={styles.heroButton}>Більше →</button>
-            </Link>
-        </section>
-        
+        <div className={styles.headerSection}>
+          <h2 className={styles.title}>Популярні події</h2>
+          <Button variant="secondary" href="/frontend/events">Більше →</Button>
+        </div>
+
         {events.length === 0 && <p>Подій поки немає.</p>}
-        
+
         <ul className={cardStyles.cardList}>
-            {events.map(renderCard)}
+          {events.map(renderCard)}
         </ul>
       </section>
 
-      {/* Секція створення */}
+      {/* --- CTA БЛОК --- */}
       <section className={styles.createBlock}>
         <div className={styles.textContent}>
-            <h2 className={styles.createTitle}>Перетвори свою ідею в подію</h2>
-            <p className={styles.createDescription}>
+          <h2 className={styles.createTitle}>Перетвори свою ідею в подію</h2>
+          <p className={styles.createDescription}>
             Створи власну подію, яка надихає...
-            </p>
-            <Link href="/frontend/events/new">
-                <button className={`${styles.button} ${styles.red}`}>Створити подію →</button>
-            </Link>
+          </p>
+          <Button variant="primary" href="/frontend/events/new">
+            Створити подію →
+          </Button>
         </div>
       </section>
 

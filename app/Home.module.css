@@ -1,76 +1,127 @@
+/* ===================== HERO ===================== */
 .heroSection {
   position: relative;
-  width: calc(100% + 10px); /* додали ширину на 10px */
-  height: 300px;
   overflow: hidden;
-  margin-left: -5px; /* виступає за межі контейнера */
-  margin-right: -5px;
-  border-radius: 8px;
+  border-radius: var(--radius-xl);
+  padding: var(--space-16) var(--space-8);
+  margin-top: var(--space-6);
+  background: linear-gradient(135deg, var(--color-primary-700), var(--color-primary-400));
+  text-align: center;
 }
 
-.heroImage {
-  object-fit: cover;
-  z-index: 0;
+/* Decorative circles — semi-transparent, partially off-edge */
+.heroCircle1 {
+  position: absolute;
+  top: -70px;
+  right: -70px;
+  width: 280px;
+  height: 280px;
+  border-radius: var(--radius-full);
+  /* white at 10% — no CSS-var equivalent for rgba alpha */
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.heroCircle2 {
+  position: absolute;
+  bottom: -80px;
+  left: -50px;
+  width: 210px;
+  height: 210px;
+  border-radius: var(--radius-full);
+  /* --color-green-500 (#2BA84A) at 25% */
+  background: rgba(43, 168, 74, 0.25);
+}
+
+.heroCircle3 {
+  position: absolute;
+  top: -20px;
+  left: 12%;
+  width: 130px;
+  height: 130px;
+  border-radius: var(--radius-full);
+  /* --color-orange-500 (#F2702A) at 25% */
+  background: rgba(242, 112, 42, 0.25);
 }
 
 .heroContent {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  color: white;
+  position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
 }
 
-.heroButton {
-  margin-top: 1rem;
-  padding: 0.5rem 1.5rem;
-  background-color: #fdf37b;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-right: 16px;
+.heroTitle {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--color-neutral-0);
+  line-height: var(--leading-tight);
+  max-width: 540px;
 }
 
-.heroButton:hover {
-  background-color: #fbe64d;
+.heroSubtitle {
+  font-size: var(--text-base);
+  color: var(--color-primary-100);
+  line-height: var(--leading-relaxed);
+  max-width: 420px;
 }
 
+.heroCta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  background: var(--color-neutral-0);
+  color: var(--color-primary-700);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-base);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: background-color var(--transition-base), transform var(--transition-fast);
+}
+
+.heroCta:hover {
+  background-color: var(--color-primary-50);
+  transform: translateY(-1px);
+}
+
+/* ===================== SECTION HEADER ===================== */
 .title {
-  font-size: 28px; /* ~text-xl */
-  font-weight: 600; /* ~font-semibold */
-  width: 70%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-left: 80px;
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+}
+
+.recsTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-primary-600);
 }
 
 .headerSection {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 24px;
-  margin-bottom: 12px;
-  flex-wrap: nowrap; /* щоб кнопка не переносилась */
-  gap: 12px;
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-3);
+  gap: var(--space-3);
 }
 
-/* для */
-/* банера створення події */
+/* ===================== CREATE BLOCK ===================== */
 .createBlock {
-  background-color: #ffeaca;
-  padding: 32px;
-  border-radius: 20px;
-  margin: 48px auto 0;
+  background-color: var(--color-primary-50);
+  border: 1px solid var(--color-primary-100);
+  padding: var(--space-8);
+  border-radius: var(--radius-xl);
+  margin-top: var(--space-12);
+  margin-bottom: var(--space-16);
   display: flex;
   justify-content: center;
   align-items: center;
   max-width: 1100px;
-  margin-bottom: 64px;
 }
 
 .textContent {
@@ -78,29 +129,15 @@
 }
 
 .createTitle {
-  font-size: 28px;
-  font-weight: 700;
-  color: #222;
-  margin-bottom: 12px;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-3);
 }
 
 .createDescription {
-  font-size: 16px;
-  color: #555;
-  margin-bottom: 20px;
-  line-height: 1.6;
-}
-
-.red {
-  background-color: #fb9b0b;
-  color: white;
-  font-size: 16px;
-  font-weight: 500;
-  padding: 10px 22px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-}
-
-.red:hover {
-  background-color: #fb870b;
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-5);
+  line-height: var(--leading-relaxed);
 }
