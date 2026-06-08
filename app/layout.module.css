@@ -1,0 +1,15 @@
+/* ================================================================
+   Root layout
+   ================================================================ */
+
+.main {
+  min-height: calc(100dvh - 57px); /* 57px — висота хедера */
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: var(--space-6);
+  padding-right: var(--space-6);
+}

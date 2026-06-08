@@ -1,6 +1,14 @@
 import "./globals.css";
+import styles from "./layout.module.css";
+import { Inter } from "next/font/google";
 import Header from "@/components/Header";
 import type { Metadata } from "next";
+
+const inter = Inter({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Kindred",
@@ -8,10 +16,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="uk">
+    <html lang="uk" className={inter.variable}>
       <body>
         <Header />
-        <main>{children}</main>
+        <main className={styles.main}>
+          <div className={styles.container}>
+            {children}
+          </div>
+        </main>
       </body>
     </html>
   );

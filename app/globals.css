@@ -1,13 +1,185 @@
+/* ================================================================
+   DESIGN TOKENS — Kindred
+   Усі CSS-змінні зібрані тут. Компоненти читають тільки їх.
+   ================================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+
+  /* --------------------------------------------------------------
+     PRIMARY — Blue
+     Base: #3D9BE8  ≈ hsl(207 79% 57%)
+     -------------------------------------------------------------- */
+  --color-primary-50:  #eff7ff;
+  --color-primary-100: #d6ecfe;
+  --color-primary-200: #a8d6fd;
+  --color-primary-300: #6ab9f9;
+  --color-primary-400: #3da6f0;
+  --color-primary-500: #3D9BE8;
+  --color-primary-600: #1f7ec9;
+  --color-primary-700: #1762a0;
+  --color-primary-800: #134878;
+  --color-primary-900: #0e3051;
+
+  /* --------------------------------------------------------------
+     ACCENT — Orange
+     Base: #F2702A  ≈ hsl(21 89% 56%)
+     -------------------------------------------------------------- */
+  --color-orange-50:  #fff4ee;
+  --color-orange-100: #ffe3d0;
+  --color-orange-200: #ffc4a0;
+  --color-orange-300: #ffa070;
+  --color-orange-400: #f87d48;
+  --color-orange-500: #F2702A;
+  --color-orange-600: #d45820;
+  --color-orange-700: #a84318;
+  --color-orange-800: #7d3012;
+  --color-orange-900: #51200c;
+
+  /* --------------------------------------------------------------
+     ACCENT — Green
+     Base: #2BA84A  ≈ hsl(135 59% 41%)
+     -------------------------------------------------------------- */
+  --color-green-50:  #f0faf3;
+  --color-green-100: #d9f2e3;
+  --color-green-200: #aee2c0;
+  --color-green-300: #72ca8f;
+  --color-green-400: #44b463;
+  --color-green-500: #2BA84A;
+  --color-green-600: #228a3b;
+  --color-green-700: #1a6d2e;
+  --color-green-800: #135123;
+  --color-green-900: #0d3717;
+
+  /* --------------------------------------------------------------
+     NEUTRAL — Cream / Gray
+     Фон сторінки: #FBFAF7 (теплий кремовий)
+     -------------------------------------------------------------- */
+  --color-neutral-0:   #ffffff;
+  --color-neutral-50:  #FBFAF7;
+  --color-neutral-100: #F4F3EE;
+  --color-neutral-200: #E8E6DF;
+  --color-neutral-300: #D4D1C8;
+  --color-neutral-400: #B8B4A8;
+  --color-neutral-500: #8E8A7E;
+  --color-neutral-600: #6B6760;
+  --color-neutral-700: #4A4740;
+  --color-neutral-800: #2E2C28;
+  --color-neutral-900: #1A1916;
+
+  /* --------------------------------------------------------------
+     SEMANTIC
+     -------------------------------------------------------------- */
+  --color-success:       var(--color-green-500);
+  --color-success-light: var(--color-green-50);
+  --color-success-dark:  var(--color-green-700);
+
+  --color-danger:        #E03E3E;
+  --color-danger-light:  #FEF2F2;
+  --color-danger-dark:   #B91C1C;
+
+  --color-warning:       var(--color-orange-500);
+  --color-warning-light: var(--color-orange-50);
+  --color-warning-dark:  var(--color-orange-700);
+
+  --color-info:          var(--color-primary-500);
+  --color-info-light:    var(--color-primary-50);
+  --color-info-dark:     var(--color-primary-700);
+
+  /* --------------------------------------------------------------
+     SURFACE / TEXT — зручні аліаси для компонентів
+     -------------------------------------------------------------- */
+  --color-bg:              var(--color-neutral-50);
+  --color-surface:         var(--color-neutral-0);
+  --color-border:          var(--color-neutral-200);
+  --color-border-strong:   var(--color-neutral-300);
+
+  --color-text:            var(--color-neutral-900);
+  --color-text-secondary:  var(--color-neutral-600);
+  --color-text-muted:      var(--color-neutral-400);
+  --color-text-on-primary: #ffffff;
+
+  /* --color-neutral-50 (#FBFAF7 = rgb 251 250 247) з alpha для хедера */
+  --color-header-bg: rgba(251, 250, 247, 0.88);
+
+  /* --------------------------------------------------------------
+     TYPOGRAPHY
+     -------------------------------------------------------------- */
+  --font-sans: var(--font-inter), Inter, system-ui, -apple-system, sans-serif;
+
+  /* Шкала розмірів */
+  --text-xs:   0.75rem;    /* 12px */
+  --text-sm:   0.875rem;   /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg:   1.125rem;   /* 18px */
+  --text-xl:   1.25rem;    /* 20px */
+  --text-2xl:  1.5rem;     /* 24px */
+  --text-3xl:  1.875rem;   /* 30px */
+
+  /* Міжрядковий інтервал */
+  --leading-tight:   1.2;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.7;
+
+  /* Насиченість шрифту */
+  --font-normal:   400;
+  --font-medium:   500;
+  --font-semibold: 600;
+  --font-bold:     700;
+
+  /* --------------------------------------------------------------
+     SPACING  4 / 8 / 12 / 16 / 24 / 32 / 48 / 64
+     -------------------------------------------------------------- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* --------------------------------------------------------------
+     BORDER RADIUS
+     -------------------------------------------------------------- */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-full: 9999px;
+
+  /* --------------------------------------------------------------
+     SHADOWS
+     Колір тіні — нейтральний теплий #1A1916 з малою opacity
+     -------------------------------------------------------------- */
+  --shadow-sm:
+    0 1px 2px rgba(26, 25, 22, 0.06),
+    0 1px 3px rgba(26, 25, 22, 0.08);
+
+  --shadow-md:
+    0 2px 4px rgba(26, 25, 22, 0.06),
+    0 4px 8px rgba(26, 25, 22, 0.08);
+
+  --shadow-lg:
+    0 4px 6px rgba(26, 25, 22, 0.05),
+    0 10px 20px rgba(26, 25, 22, 0.10);
+
+  /* --------------------------------------------------------------
+     TRANSITIONS
+     -------------------------------------------------------------- */
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+
+/* ================================================================
+   BASE RESET
+   ================================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 html,
@@ -17,26 +189,16 @@ body {
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
 }
 
 a {
   color: inherit;
   text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
 }
