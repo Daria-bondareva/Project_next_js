@@ -1,82 +1,70 @@
 .container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: var(--space-10) var(--space-5);
 }
 
 .title {
-  font-size: 26px;
-  font-weight: bold;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
   text-align: center;
-  margin-bottom: 30px;
-  color: #222;
+  margin-bottom: var(--space-8);
+  color: var(--color-text);
 }
 
 .noEvents {
   text-align: center;
-  color: #666;
-  font-size: 16px;
-  background-color: #fff5e5;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  color: var(--color-text-muted);
+  font-size: var(--text-base);
+  background-color: var(--color-surface);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
 }
 
 .eventList {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--space-5);
 }
 
 .eventCard {
-  background-color: #fffef6;
-  padding: 20px 24px;
-  border-radius: 16px;
-  border: 1px solid #f2e3c6;
+  background-color: var(--color-surface);
+  padding: var(--space-5) var(--space-6);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  transition: transform 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition-base), transform var(--transition-base);
 }
 
 .eventCard:hover {
+  border-color: var(--color-primary-300);
   transform: translateY(-2px);
 }
 
 .eventTitle {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: #333;
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  margin-bottom: var(--space-1);
+  color: var(--color-text);
 }
 
 .eventDate {
-  font-size: 14px;
-  color: #666;
-}
-
-.viewLink {
-  background-color: #fb9b0b;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: background-color 0.3s;
-}
-
-.viewLink:hover {
-  background-color: #fb870b;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
 }
 
 .error {
-  padding: 20px;
-  color: #b91c1c;
-  background-color: #fee2e2;
-  border-radius: 12px;
+  padding: var(--space-5);
+  color: var(--color-danger-dark);
+  background-color: var(--color-danger-light);
+  border-radius: var(--radius-lg);
   text-align: center;
-  margin: 40px auto;
+  margin: var(--space-10) auto;
   max-width: 600px;
-  font-weight: 600;
+  font-weight: var(--font-semibold);
 }

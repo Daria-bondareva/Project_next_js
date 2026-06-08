@@ -5,7 +5,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Затемнення фону */
+  background-color: rgba(0, 0, 0, 0.45);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,136 +14,71 @@
 }
 
 .modalContent {
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
+  background: var(--color-surface);
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
   width: 90%;
   max-width: 600px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-lg);
   animation: slideUp 0.3s ease-out;
 }
 
 .modalHeader {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-5);
   text-align: center;
-  font-weight: bold;
+  font-weight: var(--font-bold);
+  color: var(--color-text);
 }
 
-/* Сітка для двох ячейок */
 .selectionArea {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--space-5);
 }
 
 .sectionBox {
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 15px;
-  min-height: 100px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  min-height: 80px;
+}
+
+.selectedBox {
+  border-color: var(--color-primary-200);
+  background-color: var(--color-primary-50);
 }
 
 .sectionTitle {
-  font-size: 0.9rem;
-  color: #6b7280;
-  margin-bottom: 10px;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-weight: var(--font-semibold);
 }
 
 .tagList {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-2);
 }
 
-/* Інтерактивна пігулка у модалці */
-.interactiveTag {
-  padding: 6px 12px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Плавна анімація */
-  border: 1px solid transparent;
-}
-
-/* Стиль для обраних (верхня ячейка) */
-.selectedTag {
-  background-color: #4f46e5;
-  color: white;
-  box-shadow: 0 2px 5px rgba(79, 70, 229, 0.3);
-}
-
-.selectedTag:hover {
-  background-color: #4338ca;
-  transform: translateY(-1px);
-}
-
-/* Стиль для доступних (нижня ячейка) */
-.availableTag {
-  background-color: #f3f4f6;
-  color: #374151;
-  border: 1px solid #d1d5db;
-}
-
-.availableTag:hover {
-  background-color: #d1d5db;
-  transform: translateY(-1px);
-}
-
-/* Кнопки дій */
 .modalActions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 25px;
-  padding-top: 15px;
-  border-top: 1px solid #e5e7eb;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
 }
 
-.saveBtn {
-  background-color: #10b981;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-}
-.saveBtn:hover {
-  background-color: #059669;
-}
-
-.cancelBtn {
-  background-color: #ef4444;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-}
-.cancelBtn:hover {
-  background-color: #dc2626;
-}
-
-/* Анімації появи */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
+
 @keyframes slideUp {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
