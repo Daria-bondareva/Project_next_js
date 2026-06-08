@@ -147,7 +147,7 @@ export default function HomePage() {
             <p>Завантаження рекомендацій...</p>
           ) : recommendations.length > 0 ? (
             <ul className={cardStyles.cardList}>
-              {recommendations.map(renderCard)}
+              {recommendations.slice(0, 6).map(renderCard)}
             </ul>
           ) : (
             <div style={{ padding: '20px', background: 'var(--color-surface)', borderRadius: 'var(--radius-lg)', textAlign: 'center', border: '1px dashed var(--color-border-strong)' }}>
