@@ -7,48 +7,51 @@
 
   /* --------------------------------------------------------------
      PRIMARY — Blue
-     Base: #3D9BE8  ≈ hsl(207 79% 57%)
+     Base: #1f7ec9  ≈ hsl(207 73% 45%)
      -------------------------------------------------------------- */
-  --color-primary-50:  #eff7ff;
-  --color-primary-100: #d6ecfe;
-  --color-primary-200: #a8d6fd;
-  --color-primary-300: #6ab9f9;
-  --color-primary-400: #3da6f0;
-  --color-primary-500: #3D9BE8;
-  --color-primary-600: #1f7ec9;
-  --color-primary-700: #1762a0;
-  --color-primary-800: #134878;
-  --color-primary-900: #0e3051;
+  --color-primary-50:  #ecf6fe;
+  --color-primary-100: #d5eafb;
+  --color-primary-200: #add5f5;
+  --color-primary-300: #79b8ec;
+  --color-primary-400: #4199e1;
+  --color-primary-500: #1f7ec9;
+  --color-primary-600: #1768ab;
+  --color-primary-700: #0f538a;
+  --color-primary-800: #0a3d67;
+  --color-primary-900: #052a47;
+
+  /* Світлий крижаний акцент — фон тегів */
+  --color-ice: #bff4ff;
 
   /* --------------------------------------------------------------
      ACCENT — Orange
-     Base: #F2702A  ≈ hsl(21 89% 56%)
+     Base: #f97425  ≈ hsl(22 94% 56%)
      -------------------------------------------------------------- */
-  --color-orange-50:  #fff4ee;
-  --color-orange-100: #ffe3d0;
-  --color-orange-200: #ffc4a0;
-  --color-orange-300: #ffa070;
-  --color-orange-400: #f87d48;
-  --color-orange-500: #F2702A;
-  --color-orange-600: #d45820;
-  --color-orange-700: #a84318;
-  --color-orange-800: #7d3012;
-  --color-orange-900: #51200c;
+  --color-orange-50:  #fff2eb;
+  --color-orange-100: #fedfcd;
+  --color-orange-200: #fcbf9c;
+  --color-orange-300: #fa9f6b;
+  --color-orange-400: #fa8642;
+  --color-orange-500: #f97425;
+  --color-orange-600: #de5d12;
+  --color-orange-700: #b64a0c;
+  --color-orange-800: #8d3807;
+  --color-orange-900: #622704;
 
   /* --------------------------------------------------------------
      ACCENT — Green
-     Base: #2BA84A  ≈ hsl(135 59% 41%)
+     Base: #23a64c  ≈ hsl(139 65% 39%)
      -------------------------------------------------------------- */
-  --color-green-50:  #f0faf3;
-  --color-green-100: #d9f2e3;
-  --color-green-200: #aee2c0;
-  --color-green-300: #72ca8f;
-  --color-green-400: #44b463;
-  --color-green-500: #2BA84A;
-  --color-green-600: #228a3b;
-  --color-green-700: #1a6d2e;
-  --color-green-800: #135123;
-  --color-green-900: #0d3717;
+  --color-green-50:  #effaf3;
+  --color-green-100: #dbf5e3;
+  --color-green-200: #b0e8c2;
+  --color-green-300: #79d897;
+  --color-green-400: #3ecc6b;
+  --color-green-500: #23a64c;
+  --color-green-600: #198f3f;
+  --color-green-700: #117330;
+  --color-green-800: #0b5623;
+  --color-green-900: #063c17;
 
   /* --------------------------------------------------------------
      NEUTRAL — Cream / Gray

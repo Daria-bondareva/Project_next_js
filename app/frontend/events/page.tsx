@@ -14,6 +14,7 @@ type Event = {
   title: string;
   date: string;
   tags?: string[];
+  participants?: string[];
   userId: {
     _id: string;
     username: string;
@@ -27,7 +28,23 @@ export default function EventsPage() {
   const [sortField, setSortField] = useState<"title" | "date">("title");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [loading, setLoading] = useState(true);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const sortOrder = `${sortField}_${sortDirection}`;
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch("/api/auth/me");
+        if (res.ok) {
+          const data = await res.json();
+          setCurrentUserId(data.user?._id ?? null);
+        }
+      } catch {
+        setCurrentUserId(null);
+      }
+    };
+    checkAuth();
+  }, []);
 
   useEffect(() => {
     const loadEvents = async () => {
@@ -93,10 +110,27 @@ export default function EventsPage() {
         <p className={pageStyles.stateText}>Немає подій.</p>
       ) : (
         <ul className={cardStyles.cardList}>
-          {events.map((event) => (
+          {events.map((event) => {
+            const isParticipant =
+              currentUserId != null &&
+              (event.participants ?? []).some((p) => String(p) === String(currentUserId));
+
+            const daysUntil = (new Date(event.date).getTime() - Date.now()) / 86_400_000;
+            const isSoon = daysUntil >= 0 && daysUntil <= 7;
+            const isPast = daysUntil < 0;
+
+            return (
             <li key={event._id} className={cardStyles.card}>
               <div className={cardStyles.cardBody}>
                 <h3 className={cardStyles.cardHeader}>{event.title}</h3>
+
+                {(isParticipant || isSoon || isPast) && (
+                  <div className={cardStyles.tagsContainer}>
+                    {isParticipant && <Badge variant="success">Ви берете участь</Badge>}
+                    {isSoon && <Badge variant="accent">Скоро</Badge>}
+                    {isPast && <Badge variant="muted">Завершено</Badge>}
+                  </div>
+                )}
 
                 {event.tags && event.tags.length > 0 && (
                   <div className={cardStyles.tagsContainer}>
@@ -125,7 +159,8 @@ export default function EventsPage() {
                 Детальніше
               </Button>
             </li>
-          ))}
+            );
+          })}
         </ul>
       )}
     </main>

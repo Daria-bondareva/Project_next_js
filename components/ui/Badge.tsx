@@ -1,7 +1,7 @@
 import { ReactNode, KeyboardEvent } from "react";
 import styles from "./Badge.module.css";
 
-type Variant = "filled" | "outline" | "selected";
+type Variant = "filled" | "outline" | "selected" | "success" | "accent" | "muted";
 
 interface BadgeProps {
   variant?: Variant;

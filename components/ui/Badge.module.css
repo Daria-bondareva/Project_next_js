@@ -36,7 +36,7 @@
    filled — заливка primary (теги подій, інтереси)
    ---------------------------------------------------------------- */
 .filled {
-  background-color: var(--color-primary-50);
+  background-color: var(--color-ice);
   color: var(--color-primary-700);
   border-color: var(--color-primary-100);
 }
@@ -63,12 +63,51 @@
    selected — активний / обраний тег
    ---------------------------------------------------------------- */
 .selected {
-  background-color: var(--color-primary-500);
+  background-color: var(--color-primary-600);
   color: var(--color-text-on-primary);
-  border-color: var(--color-primary-500);
+  border-color: var(--color-primary-600);
 }
 
 .selected.clickable:hover {
-  background-color: var(--color-primary-600);
-  border-color: var(--color-primary-600);
+  background-color: var(--color-primary-700);
+  border-color: var(--color-primary-700);
+}
+
+/* ----------------------------------------------------------------
+   success — статус «Ви берете участь» (зелений)
+   ---------------------------------------------------------------- */
+.success {
+  background-color: var(--color-success-light);
+  color: var(--color-success-dark);
+  border-color: var(--color-green-100);
+}
+
+.success.clickable:hover {
+  background-color: var(--color-green-100);
+}
+
+/* ----------------------------------------------------------------
+   accent — статус «Скоро» (помаранчевий)
+   ---------------------------------------------------------------- */
+.accent {
+  background-color: var(--color-orange-50);
+  color: var(--color-orange-700);
+  border-color: var(--color-orange-100);
+}
+
+.accent.clickable:hover {
+  background-color: var(--color-orange-100);
+}
+
+/* ----------------------------------------------------------------
+   muted — статус «Завершено» (нейтральний сірий)
+   ---------------------------------------------------------------- */
+.muted {
+  background-color: var(--color-neutral-100);
+  color: var(--color-text-secondary);
+  border-color: var(--color-neutral-200);
+}
+
+.muted.clickable:hover {
+  background-color: var(--color-neutral-200);
 }

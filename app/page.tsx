@@ -14,6 +14,7 @@ type Event = {
   title: string;
   date: string;
   tags?: string[];
+  participants?: string[];
   userId: {
     _id: string;
     username: string;
@@ -24,6 +25,7 @@ export default function HomePage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [recommendations, setRecommendations] = useState<Event[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [loadingRecs, setLoadingRecs] = useState(false);
 
   useEffect(() => {
@@ -34,6 +36,8 @@ export default function HomePage() {
         setIsLoggedIn(authStatus);
 
         if (authStatus) {
+          const data = await res.json();
+          setCurrentUserId(data.user?._id ?? null);
           loadRecommendations();
         }
       } catch {
@@ -69,10 +73,27 @@ export default function HomePage() {
     checkAuth();
   }, []);
 
-  const renderCard = (e: Event) => (
+  const renderCard = (e: Event) => {
+    const isParticipant =
+      currentUserId != null &&
+      (e.participants ?? []).some((p) => String(p) === String(currentUserId));
+
+    const daysUntil = (new Date(e.date).getTime() - Date.now()) / 86_400_000;
+    const isSoon = daysUntil >= 0 && daysUntil <= 7;
+    const isPast = daysUntil < 0;
+
+    return (
     <li key={e._id} className={cardStyles.card}>
       <div className={cardStyles.cardBody}>
         <h3 className={cardStyles.cardHeader}>{e.title}</h3>
+
+        {(isParticipant || isSoon || isPast) && (
+          <div className={cardStyles.tagsContainer}>
+            {isParticipant && <Badge variant="success">Ви берете участь</Badge>}
+            {isSoon && <Badge variant="accent">Скоро</Badge>}
+            {isPast && <Badge variant="muted">Завершено</Badge>}
+          </div>
+        )}
 
         {e.tags && e.tags.length > 0 && (
           <div className={cardStyles.tagsContainer}>
@@ -107,7 +128,8 @@ export default function HomePage() {
         Детальніше
       </Button>
     </li>
-  );
+    );
+  };
 
   return (
     <main className="max-w-3xl mx-auto p-4 space-y-6">

@@ -77,12 +77,12 @@
    Login button — primary solid CTA
    ---------------------------------------------------------------- */
 .yellow {
-  background-color: var(--color-primary-500);
+  background-color: var(--color-primary-600);
   color: var(--color-text-on-primary);
   font-weight: var(--font-semibold);
   border-radius: var(--radius-md);
 }
 
 .yellow:hover {
-  background-color: var(--color-primary-600);
+  background-color: var(--color-primary-700);
 }
