@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchEvents } from "@/lib/api";
-import { Calendar, User, Sparkles } from "lucide-react";
+import { Calendar, User } from "lucide-react";
 import styles from "./Home.module.css";
 import cardStyles from "./frontend/css/EventCard.module.css";
 import Badge from "@/components/ui/Badge";
@@ -26,6 +26,7 @@ export default function HomePage() {
   const [recommendations, setRecommendations] = useState<Event[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [currentUserName, setCurrentUserName] = useState<string | null>(null);
   const [loadingRecs, setLoadingRecs] = useState(false);
 
   useEffect(() => {
@@ -38,6 +39,7 @@ export default function HomePage() {
         if (authStatus) {
           const data = await res.json();
           setCurrentUserId(data.user?._id ?? null);
+          setCurrentUserName(data.user?.username ?? null);
           loadRecommendations();
         }
       } catch {
@@ -157,13 +159,18 @@ export default function HomePage() {
       {/* --- РЕКОМЕНДАЦІЇ --- */}
       {isLoggedIn && (
         <section style={{ marginBottom: '40px', marginTop: '20px' }}>
-          <h2 className={`${styles.title} ${styles.recsTitle}`}>
-            <Sparkles size={18} />
-            Рекомендовано для вас
-          </h2>
-          <p style={{ fontSize: '0.9em', color: 'var(--color-text-muted)', marginBottom: '15px' }}>
-            Підібрано на основі ваших інтересів
-          </p>
+          <div className={styles.welcomeBanner}>
+            <div className={styles.welcomeCircleWhite} />
+            <div className={styles.welcomeCircleOrange} />
+            <div className={styles.welcomeContent}>
+              <h2 className={styles.welcomeTitle}>
+                {currentUserName ? `Привіт, ${currentUserName}!` : "Привіт!"}
+              </h2>
+              <p className={styles.welcomeSubtitle}>
+                Ось події, які ми підібрали саме для тебе
+              </p>
+            </div>
+          </div>
 
           {loadingRecs ? (
             <p>Завантаження рекомендацій...</p>
