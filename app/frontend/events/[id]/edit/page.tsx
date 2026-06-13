@@ -28,7 +28,10 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
 
       const data = await res.json();
       setTitle(data.title);
-      setDate(new Date(data.date).toISOString().slice(0, 16));
+      const d = new Date(data.date);
+      const pad = (n: number) => String(n).padStart(2, "0");
+      const localDate = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      setDate(localDate);
       setTags(data.tags || []);
       setDescription(data.description || "");
     };
