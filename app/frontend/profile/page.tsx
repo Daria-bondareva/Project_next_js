@@ -63,6 +63,8 @@ export default function ProfilePage() {
   if (loading) return <p>Завантаження...</p>;
   if (!user) return <p>Користувача не знайдено або ви не авторизовані</p>;
 
+  const currentUserId = user?._id ?? null;
+
   return (
     <main className={styles.profileContainer}>
       <section className={styles.userCard}>
@@ -107,14 +109,35 @@ export default function ProfilePage() {
           <p className={styles.noEvents}>Немає подій.</p>
         ) : (
           <ul className={styles.eventsList}>
-            {events.map((event: any) => (
-              <li key={event._id} className={styles.eventCard}>
-                <span className={styles.eventTitle}>{event.title}</span>
-                <Button variant="ghost" size="sm" href={`/frontend/events/${event._id}`}>
-                  Переглянути
-                </Button>
-              </li>
-            ))}
+            {events.map((event: { _id: string; title: string; date: string; participants?: string[] }) => {
+              const isParticipant =
+                currentUserId != null &&
+                (event.participants ?? []).some((p) => String(p) === String(currentUserId));
+
+              const daysUntil = (new Date(event.date).getTime() - Date.now()) / 86_400_000;
+              const isSoon = daysUntil >= 0 && daysUntil <= 7;
+              const isPast = daysUntil < 0;
+
+              return (
+                <li key={event._id} className={styles.eventCard}>
+                  <div className={styles.eventInfo}>
+                    <span className={styles.eventTitle}>{event.title}</span>
+
+                    {(isParticipant || isSoon || isPast) && (
+                      <div className={styles.eventBadges}>
+                        {isParticipant && <Badge variant="success">Ви берете участь</Badge>}
+                        {isSoon && <Badge variant="accent">Скоро</Badge>}
+                        {isPast && <Badge variant="muted">Завершено</Badge>}
+                      </div>
+                    )}
+                  </div>
+
+                  <Button variant="ghost" size="sm" href={`/frontend/events/${event._id}`}>
+                    Переглянути
+                  </Button>
+                </li>
+              );
+            })}
           </ul>
         )}
       </section>

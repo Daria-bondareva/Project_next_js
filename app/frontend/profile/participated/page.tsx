@@ -3,6 +3,7 @@ import Event from "@/lib/models/Event";
 import { getCurrentUser } from "@/lib/getCurrentUser";
 import styles from "@/app/frontend/css/ParticipatedEvents.module.css";
 import Button from "@/components/ui/Button";
+import Badge from "@/components/ui/Badge";
 
 export default async function ParticipatedEventsPage() {
   await connectDB();
@@ -24,19 +25,34 @@ export default async function ParticipatedEventsPage() {
         <p className={styles.noEvents}>Ви ще не приєдналися до жодної події.</p>
       ) : (
         <ul className={styles.eventList}>
-          {events.map((event) => (
-            <li key={String(event._id)} className={styles.eventCard}>
-              <div>
-                <h2 className={styles.eventTitle}>{event.title}</h2>
-                <p className={styles.eventDate}>
-                  {new Date(event.date).toLocaleString()}
-                </p>
-              </div>
-              <Button variant="ghost" size="sm" href={`/frontend/events/${String(event._id)}`}>
-                Переглянути
-              </Button>
-            </li>
-          ))}
+          {events.map((event) => {
+            const daysUntil = (new Date(event.date).getTime() - Date.now()) / 86_400_000;
+            const isSoon = daysUntil >= 0 && daysUntil <= 7;
+            const isPast = daysUntil < 0;
+
+            return (
+              <li key={String(event._id)} className={styles.eventCard}>
+                <div>
+                  <div className={styles.eventTitleRow}>
+                    <h2 className={styles.eventTitle}>{event.title}</h2>
+
+                    {(isSoon || isPast) && (
+                      <div className={styles.eventBadges}>
+                        {isSoon && <Badge variant="accent">Скоро</Badge>}
+                        {isPast && <Badge variant="muted">Завершено</Badge>}
+                      </div>
+                    )}
+                  </div>
+                  <p className={styles.eventDate}>
+                    {new Date(event.date).toLocaleString()}
+                  </p>
+                </div>
+                <Button variant="ghost" size="sm" href={`/frontend/events/${String(event._id)}`}>
+                  Переглянути
+                </Button>
+              </li>
+            );
+          })}
         </ul>
       )}
     </main>
