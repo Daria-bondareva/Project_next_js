@@ -30,7 +30,7 @@ export default async function ParticipatedEventsPage() {
         <p className={styles.noEvents}>Ви ще не приєдналися до жодної події.</p>
       ) : (
         <ul className={styles.eventList}>
-          {partitionUpcomingFirst(events).map((event) => {
+          {partitionUpcomingFirst(events as unknown as { _id: string; title: string; date: string; participants?: string[] }[]).map((event) => {
             const daysUntil = (new Date(event.date).getTime() - Date.now()) / 86_400_000;
             const isSoon = daysUntil >= 0 && daysUntil <= 7;
             const isPast = daysUntil < 0;

@@ -40,9 +40,21 @@ export async function POST(req: Request) {
     );
   }
 
+  // Нормалізація пошти, щоб A@mail.com і a@mail.com вважались однаковими
+  const normalizedEmail = email.trim().toLowerCase();
+
+  // Перевірка наявності пошти
+  const existingEmail = await User.findOne({ email: normalizedEmail });
+  if (existingEmail) {
+    return NextResponse.json(
+      { error: "Ця пошта вже використовується" },
+      { status: 400 }
+    );
+  }
+
   const passwordHash = await bcrypt.hash(password, 10);
 
-  const newUser = new User({ username, email, passwordHash });
+  const newUser = new User({ username, email: normalizedEmail, passwordHash });
   const savedUser = await newUser.save();
 
   return NextResponse.json({

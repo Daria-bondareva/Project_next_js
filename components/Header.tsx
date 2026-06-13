@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import styles from "./Header.module.css";
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -20,7 +21,7 @@ export default function Header() {
     };
 
     checkAuth();
-  }, []);
+  }, [pathname]);
 
   const handleAddEvent = async () => {
     try {
