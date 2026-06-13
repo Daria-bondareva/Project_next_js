@@ -5,6 +5,10 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 
+// Гарантуємо реєстрацію схеми User для .populate("userId"),
+// інакше імпорт може бути викинутий бандлером (MissingSchemaError).
+void User;
+
 export async function GET(req: Request) {
   await connectDB();
   const { searchParams } = new URL(req.url);
