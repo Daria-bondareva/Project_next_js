@@ -21,6 +21,11 @@ type Event = {
   };
 };
 
+const partitionUpcomingFirst = <T extends { date: string | Date }>(list: T[]): T[] => {
+  const isPast = (e: T) => new Date(e.date).getTime() - Date.now() < 0;
+  return [...list.filter((e) => !isPast(e)), ...list.filter(isPast)];
+};
+
 export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -110,7 +115,7 @@ export default function EventsPage() {
         <p className={pageStyles.stateText}>Немає подій.</p>
       ) : (
         <ul className={cardStyles.cardList}>
-          {events.map((event) => {
+          {partitionUpcomingFirst(events).map((event) => {
             const isParticipant =
               currentUserId != null &&
               (event.participants ?? []).some((p) => String(p) === String(currentUserId));
