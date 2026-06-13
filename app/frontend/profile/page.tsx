@@ -7,6 +7,11 @@ import TagSelectionModal from "@/components/TagSelectionModal";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 
+const partitionUpcomingFirst = <T extends { date: string | Date }>(list: T[]): T[] => {
+  const isPast = (e: T) => new Date(e.date).getTime() - Date.now() < 0;
+  return [...list.filter((e) => !isPast(e)), ...list.filter(isPast)];
+};
+
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
   const [events, setEvents] = useState([]);
@@ -109,7 +114,7 @@ export default function ProfilePage() {
           <p className={styles.noEvents}>Немає подій.</p>
         ) : (
           <ul className={styles.eventsList}>
-            {events.map((event: { _id: string; title: string; date: string; participants?: string[] }) => {
+            {partitionUpcomingFirst(events as { _id: string; title: string; date: string; participants?: string[] }[]).map((event) => {
               const isParticipant =
                 currentUserId != null &&
                 (event.participants ?? []).some((p) => String(p) === String(currentUserId));

@@ -5,6 +5,11 @@ import styles from "@/app/frontend/css/ParticipatedEvents.module.css";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 
+const partitionUpcomingFirst = <T extends { date: string | Date }>(list: T[]): T[] => {
+  const isPast = (e: T) => new Date(e.date).getTime() - Date.now() < 0;
+  return [...list.filter((e) => !isPast(e)), ...list.filter(isPast)];
+};
+
 export default async function ParticipatedEventsPage() {
   await connectDB();
 
@@ -25,7 +30,7 @@ export default async function ParticipatedEventsPage() {
         <p className={styles.noEvents}>Ви ще не приєдналися до жодної події.</p>
       ) : (
         <ul className={styles.eventList}>
-          {events.map((event) => {
+          {partitionUpcomingFirst(events).map((event) => {
             const daysUntil = (new Date(event.date).getTime() - Date.now()) / 86_400_000;
             const isSoon = daysUntil >= 0 && daysUntil <= 7;
             const isPast = daysUntil < 0;

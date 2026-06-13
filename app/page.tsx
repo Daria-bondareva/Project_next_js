@@ -21,6 +21,11 @@ type Event = {
   };
 };
 
+const partitionUpcomingFirst = <T extends { date: string | Date }>(list: T[]): T[] => {
+  const isPast = (e: T) => new Date(e.date).getTime() - Date.now() < 0;
+  return [...list.filter((e) => !isPast(e)), ...list.filter(isPast)];
+};
+
 export default function HomePage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [recommendations, setRecommendations] = useState<Event[]>([]);
@@ -176,7 +181,7 @@ export default function HomePage() {
             <p>Завантаження рекомендацій...</p>
           ) : recommendations.length > 0 ? (
             <ul className={cardStyles.cardList}>
-              {recommendations.slice(0, 6).map(renderCard)}
+              {partitionUpcomingFirst(recommendations.slice(0, 6)).map(renderCard)}
             </ul>
           ) : (
             <div style={{ padding: '20px', background: 'var(--color-surface)', borderRadius: 'var(--radius-lg)', textAlign: 'center', border: '1px dashed var(--color-border-strong)' }}>
@@ -199,7 +204,7 @@ export default function HomePage() {
         {events.length === 0 && <p>Подій поки немає.</p>}
 
         <ul className={cardStyles.cardList}>
-          {events.map(renderCard)}
+          {partitionUpcomingFirst(events).map(renderCard)}
         </ul>
       </section>
 
